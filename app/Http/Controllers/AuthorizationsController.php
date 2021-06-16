@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\Accounts;
 use App\Models\Authorizations;
 use App\Models\Medias;
@@ -18,6 +19,7 @@ class AuthorizationsController extends Controller
     public function index(Request $request)
     {
         $authorizations = Authorizations::all();
+        $count= $authorizations->count();
         $filters = [];
         if ($request->has('media')) {
             $authorizations->where('media', '=', $request->media);
@@ -51,15 +53,7 @@ class AuthorizationsController extends Controller
             $authorizations->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return response()->json([
-            'code' => 'success',
-            'data' => $authorizations,
-            "meta" => [
-                "total" => $authorizations->count(),
-                "links" => "",
-                "filters" => $filters
-            ]
-        ]);
+        return Helper::dataResponse($authorizations,$count,$filters);
     }
 
     /**
@@ -70,14 +64,11 @@ class AuthorizationsController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), ['token' => 'required', 'account_id' => 'required', 'media_id' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['token' => 'required', 'account_id' => 'required|exists:accounts,id', 'media_id' => 'required'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                'code' => "Failed",
-                'data' => $validator->errors()
-            ]);
+            return Helper::errorResponse($validator->errors()->all());
         }
         $account = Accounts::find($request->account_id);
         if ($account == NULL){
@@ -94,7 +85,7 @@ class AuthorizationsController extends Controller
             ]);
         }
         $authorization = Authorizations::create(["token"=> $request->token ,"account_id"=> $request->account_id ,"media_id"=> $request->media_id ,"status"=> 1]);
-        $this->addLog("Add",1,$authorization->id);
+        Helper::addLog("Add",1,$authorization->id);
         return response()->json([
             'code' => "Success",
             'data' => $authorization
@@ -125,7 +116,7 @@ class AuthorizationsController extends Controller
      */
     public function update(Request $request, $authorizations)
     {
-        $validator = Validator::make($request->all(), ['token' => 'required', 'status' => 'required', 'account_id' => 'required', 'media_id' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['token' => 'required', 'status' => 'required', 'account_id' => 'required|exists:accounts,id', 'media_id' => 'required'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         $authorizations->update($validator->validated());

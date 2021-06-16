@@ -32,7 +32,7 @@ use App\Http\Controllers\QuestionsController;
 /*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });*/
-Route::group(['middleware' => 'EnsureTokenIsValid'], function () {
+Route::middleware(['EnsureTokenIsValid'])->group(function (){
     Route::post('contact/segment/add', [ContactsController::class, 'addToSegment'])->name('contacts.addToSegment');
     Route::get('scopes', [AccessKeysController::class, 'scopes'])->name('accessKeys.scopes');
     Route::delete('contact/segment/delete', [ContactsController::class, 'deleteFromSegment'])->name('contacts.deleteFromSegment');

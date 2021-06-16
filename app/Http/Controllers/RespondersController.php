@@ -6,6 +6,7 @@ use App\Models\Accounts;
 use App\Models\Responders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Helper\Helper;
 
 class RespondersController extends Controller
 {
@@ -47,7 +48,7 @@ class RespondersController extends Controller
             $responders->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return $this->dataResponse($responders,$count,$filters);
+        return Helper::dataResponse($responders,$count,$filters);
     }
 
     /**
@@ -58,29 +59,19 @@ class RespondersController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), ['account_id' => 'required','name' => 'required','content' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['account_id' => 'required|exists:accounts,id','name' => 'required','content' => 'required'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                'code' => "Failed",
-                'data' => $validator->errors()
-            ],400);
-        }
-        $account = Accounts::find($request->account_id);
-        if ($account == NULL){
-            return response()->json([
-                'code' => "Failed",
-                'message' => "Account not found"
-            ],400);
+            return Helper::errorResponse($validator->errors()->all());
         }
         $responder = Responders::create($request->all());
         $responder->refresh();
-        $this->addLog("Add",10,$responder->id);
-        return response()->json([
-            'code' => "Success",
-            'data' => $responder
-        ],200);
+        if ($responder){
+            Helper::addLog("Add",10,$responder->id);
+            return Helper::createdResponse("Responder",$responder);
+        }
+        return Helper::createErrorResponse("Responder");
     }
 
     /**
@@ -109,17 +100,10 @@ class RespondersController extends Controller
         $responder->update($request->all());
         $result = $responder->wasChanged();
         if ($result){
-            $this->addLog("Update",10,$responder->id);
-            return response()->json([
-                "code"=>"Success",
-                "message" => "Responder updated successfully",
-                "data" => $responder,
-            ], 200);
+            Helper::addLog("Update",10,$responder->id);
+            return Helper::updatedResponse('Responder',$responder);
         }
-        return response()->json([
-            "code"=>"Failed",
-            "message" =>"Failed to update Responder : Nothing to update",
-        ], 400);
+        return Helper::updatedErrorResponse('Responder');
     }
 
     /**
@@ -132,10 +116,7 @@ class RespondersController extends Controller
     {
         $id = $responder->id;
         $responder->delete();
-        $this->addLog("Delete",10,$id);
-        return response()->json([
-            "code"=>"Success",
-            "message" => "Responder deleted successfully",
-        ], 200);
+        Helper::addLog("Delete",10,$id);
+        return Helper::deleteResponse('Responder');
     }
 }

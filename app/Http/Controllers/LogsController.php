@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use Illuminate\Http\Request;
 use App\Models\Logs;
 class LogsController extends Controller
@@ -43,6 +44,6 @@ class LogsController extends Controller
             $logs->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return $this->dataResponse($logs,$count,$filters);
+        return Helper::dataResponse($logs,$count,$filters);
     }
 }

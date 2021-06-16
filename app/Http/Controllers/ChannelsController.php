@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\Accounts;
 use App\Models\Channels;
 use App\Models\Medias;
@@ -52,15 +53,7 @@ class ChannelsController extends Controller
             $channels->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return response()->json([
-            'code' => 'success',
-            'data' => $channels,
-            "meta" => [
-                "total" => $count,
-                "links" => "",
-                "filters" => $filters
-            ]
-        ]);
+        return Helper::dataResponse($channels,$count,$filters);
     }
 
     /**
@@ -71,14 +64,11 @@ class ChannelsController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), ['account_id' => 'required', 'media_id' => 'required', 'identifier' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['account_id' => 'required|exists:accounts,id', 'media_id' => 'required', 'identifier' => 'required'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                'code' => "Failed",
-                'data' => $validator->errors()
-            ]);
+            return Helper::errorResponse($validator->errors()->all());
         }
         $account = Accounts::find($request->account_id);
         if ($account == NULL){
@@ -95,7 +85,7 @@ class ChannelsController extends Controller
             ]);
         }
         $channel = Channels::create($request->all());
-        $this->addLog("Add",3,$channel->id);
+        Helper::addLog("Add",3,$channel->id);
         return response()->json([
             'code' => "Success",
             'data' => $channel
@@ -126,12 +116,12 @@ class ChannelsController extends Controller
      */
     public function update(Request $request, $channel)
     {
-        $validator = Validator::make($request->all(), ['account_id' => 'required', 'media_id' => 'required', 'identifier' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['account_id' => 'required|exists:accounts,id', 'media_id' => 'required', 'identifier' => 'required'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         $channel->update($validator->validated());
         $result = $channel->wasChanged();
-        $this->addLog("Update",3,$channel->id);
+        Helper::addLog("Update",3,$channel->id);
         return response()->json([
             "code"=>$result?"Success":"Error",
             "message" => $result?"Channel updated successfully":"Failed to update Channel",
@@ -149,7 +139,7 @@ class ChannelsController extends Controller
     {
         $id = $channel->id;
         $channel->delete();
-        $this->addLog("Delete",3,$id);
+        Helper::addLog("Delete",3,$id);
         return response()->json([
             "code"=>"Success",
             "message" => "Channel deleted successfully",

@@ -6,11 +6,10 @@ use App\Models\Access_keys;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
 use App\Models\Accounts;
-use Illuminate\Support\Facades\Route;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
-
+use App\Helper\Helper;
 use Illuminate\Support\Facades\Validator;
 
 class AccountsController extends Controller
@@ -23,6 +22,7 @@ class AccountsController extends Controller
     public function index(Request $request)
     {
         $accounts = Accounts::all();
+        $count = $accounts->count();
         $filters = [];
         if ($request->has('status')) {
             $accounts->where('status', '=', $request->status);
@@ -48,15 +48,7 @@ class AccountsController extends Controller
             $accounts->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return response()->json([
-            'code' => 'success',
-            'data' => $accounts,
-            "meta" => [
-                "total" => $accounts->count(),
-                "links" => "",
-                "filters" => $filters
-            ]
-        ]);
+        return Helper::dataResponse($accounts,$count,$filters);
     }
 
     /**
@@ -71,17 +63,15 @@ class AccountsController extends Controller
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                'code' => 'Failed',
-                'data' => $validator->errors()
-            ]);
+            return Helper::errorResponse($validator->errors()->all());
         }
         $account = Accounts::create($request->all());
-        $accessKey = Access_keys::create(["token"=>$this->generateToken($account),"status"=>1,"account_id"=>$account->id,"scopes"=> $this->getAccountScopes()]);
-        return response()->json([
-            'code' => false,
-            'data' => $account
-        ]);
+        $accessKey = Access_keys::create(["token"=>Helper::generateToken($account),"status"=>1,"account_id"=>$account->id,"scopes"=> Helper::getAccountScopes()]);
+        if ($accessKey){
+            Helper::addLog("Add",10,$accessKey->id);
+            return Helper::createdResponse("Access Key",$accessKey);
+        }
+        return Helper::createErrorResponse("Access Key");
     }
 
     /**
@@ -94,7 +84,7 @@ class AccountsController extends Controller
     {
         $account->load('keys');
         return response()->json([
-            'code' => "Failed",
+            'code' => "Success",
             'data' => $account
         ]);
     }

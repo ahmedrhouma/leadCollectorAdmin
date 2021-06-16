@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Requests;
 use Illuminate\Http\Request;
+use App\Helper\Helper;
 
 class RequestsController extends Controller
 {
@@ -58,7 +59,7 @@ class RequestsController extends Controller
             $requests->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return $this->dataResponse($requests,$count,$filters);
+        return Helper::dataResponse($requests,$count,$filters);
     }
 
     /**

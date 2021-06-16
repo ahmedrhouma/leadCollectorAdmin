@@ -13,18 +13,11 @@ class Access_keys extends Model
         'id'
     ];
 
-    /**
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeOwner($query)
-    {
-        return $query->where('account_id', '=', intval(\Session::get('account_id')));
-    }
+
     public function account()
     {
         return $this->belongsTo(Accounts::class,'account_id');
     }
+
 
 }

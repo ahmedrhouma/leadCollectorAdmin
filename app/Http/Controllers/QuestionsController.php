@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Questions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Helper\Helper;
 
 class QuestionsController extends Controller
 {
@@ -46,7 +47,7 @@ class QuestionsController extends Controller
             $questions->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return $this->dataResponse($questions,$count,$filters);
+        return Helper::dataResponse($questions,$count,$filters);
     }
 
     /**
@@ -61,13 +62,16 @@ class QuestionsController extends Controller
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return $this->errorResponse($validator->errors()->all());
+            return Helper::errorResponse($validator->errors()->all());
         }
         $data = $request->all();
         $data['response'] = $data['response']==true?1:0;
         $question = Questions::create($data);
-        $this->addLog("Add",4,$question->id);
-        return $this->createdResponse("form",$question);
+        if ($question){
+            Helper::addLog("Add",4,$question->id);
+            return Helper::createdResponse("Question",$question);
+        }
+        return Helper::createErrorResponse("Question");
     }
 
     /**
@@ -91,27 +95,20 @@ class QuestionsController extends Controller
      * @param  \App\Models\Questions  $questions
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Questions $questions)
+    public function update(Request $request, Questions $question)
     {
         $validator = Validator::make($request->all(), ['responder_id' => 'required|exists:responders,id','message' => 'required','response' => 'required|in:true,false','type' => 'required|in:text,number','order' => 'required'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return $this->errorResponse($validator->errors()->all());
+            return Helper::errorResponse($validator->errors()->all());
         }
-        $questions->update($request->all());
-        $result = $questions->wasChanged();
+        $question->update($request->all());
+        $result = $question->wasChanged();
         if ($result){
-            return response()->json([
-                "code"=>"Success",
-                "message" => "Question updated successfully",
-                "data" => $questions,
-            ], 200);
+            return Helper::updatedResponse('Question',$question);
         }
-        return response()->json([
-            "code"=>"Failed",
-            "message" =>"Failed to update Question : Nothing to update",
-        ], 400);
+        return Helper::updatedErrorResponse('Question');
     }
 
     /**
@@ -124,10 +121,7 @@ class QuestionsController extends Controller
     {
         $id = $questions->id;
         $questions->delete();
-        $this->addLog("Delete",4,$id);
-        return response()->json([
-            "code"=>"Success",
-            "message" => "Question deleted successfully",
-        ], 200);
+        Helper::addLog("Delete",4,$id);
+        return Helper::deleteResponse('Question');
     }
 }

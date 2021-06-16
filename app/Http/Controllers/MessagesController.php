@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Accounts;
-use App\Models\Contacts;
 use App\Models\Messages;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Helper\Helper;
 
 class MessagesController extends Controller
 {
@@ -48,7 +46,7 @@ class MessagesController extends Controller
             $messages->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return $this->dataResponse($messages,$count,$filters);
+        return Helper::dataResponse($messages,$count,$filters);
     }
 
     /**

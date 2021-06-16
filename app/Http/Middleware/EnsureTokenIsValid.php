@@ -22,32 +22,52 @@ class EnsureTokenIsValid
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$request->header('Authorization') ||  !$this->verifyToken($request->header('Authorization'),$request)) {
+
+        $nextRequest = $next($request);
+        if (!$request->header('Authorization') ) {
             dd('Invalid token');
         }
-        return $next($request);
-    }
-    private function verifyToken($tokentext,$request)
-    {
-        if ($tokentext == $this->adminToken){
-            return true;
+        if ($request->header('Authorization') == $this->adminToken){
+            return $nextRequest;
         }
         $config = Configuration::forSymmetricSigner(
             new Sha256(),
             InMemory::base64Encoded('mBC5v1sOKVvbdEitdSBenu59nfNfhwkedkJVNabosTw=')
         );
-        $token = $config->parser()->parse($tokentext);
-        $account = Accounts::find(intval($token->claims()->get('uid')));
+        $token = $config->parser()->parse($request->header('Authorization'));
+        $action = $request->route()->getName();
+        /**
+         * check if account exist
+         */
+        $account = Accounts::where('id',$token->claims()->get('uid'))->first();
         if (!$account){
-            dd("Invalid token !");
+            return response()->json([
+                'code' => 'Error',
+                'message' => "Invalid account !"
+            ]);
+        }
+        /**
+         * check if the account is the owner of the object
+         */
+        if($request->route($request->route()->parameterNames()[0]) && $request->route($request->route()->parameterNames()[0])->account_id != $account->id)
+        {
+            return response()->json([
+                'code' => 'Error',
+                'message' => "You are not authorized to execute this command !"
+            ]);
+        }
+        /**
+         * check account authorization for current action
+         */
+        $scope = $account->keys()->whereJsonContains('scopes',$action)->where('token',$request->header('Authorization'))->first();
+        if (!$scope){
+            return response()->json([
+                'code' => 'Error',
+                'message' => "You are not authorized to execute this command !"
+            ]);
         }
         \Session::put('account_id', $account->id);
-        $accessKey  = Access_keys::where('token',$tokentext)->first();
-        \Session::put('accessKey_id', $accessKey->id);
-        $scopes = json_decode($accessKey->scopes);
-        if (!in_array(Route::getRoutes()->match($request)->action['as'],$scopes)){
-            dd("You are not authorized to execute this command !");
-        }
-        return true;
+        \Session::put('accessKey_id', $scope->id);
+        return $nextRequest;
     }
 }

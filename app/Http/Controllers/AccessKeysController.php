@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\Access_keys;
 use App\Models\Accounts;
 use DateTimeImmutable;
@@ -21,6 +22,7 @@ class AccessKeysController extends Controller
     public function index(Request $request)
     {
         $accessKeys = Access_keys::all();
+        $count= $accessKeys->count();
         $filters = [];
         if ($request->has('id')) {
             $accessKeys = Access_keys::find($request->id);
@@ -50,15 +52,7 @@ class AccessKeysController extends Controller
             $accessKeys->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return response()->json([
-            'code' => 'success',
-            'data' => $accessKeys,
-            "meta" => [
-                "total" => $accessKeys->count(),
-                "links" => "",
-                "filters" => $filters
-            ]
-        ]);
+        return Helper::dataResponse($accessKeys,$count,$filters);
     }
 
     /**
@@ -69,28 +63,18 @@ class AccessKeysController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), ['account_id' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['account_id' => 'required|exists:accounts,id'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                'code' => "Failed",
-                'data' => $validator->errors()
-            ]);
+            return Helper::errorResponse($validator->errors()->all());
         }
         $account = Accounts::find($request->account_id);
-        if ($account == NULL){
-            return response()->json([
-                'code' => "Failed",
-                'message' => "Account not find"
-            ]);
+        $accessKey = Access_keys::create(["token"=>Helper::generateToken($account),"status"=>1,"account_id"=>$account->id,"scopes"=>Helper::getAccountScopes() ]);
+        if ($accessKey){
+            return Helper::createdResponse("Access Key",$accessKey);
         }
-        $accessKey = Access_keys::create(["token"=>$this->generateToken($account),"status"=>1,"account_id"=>$account->id,"scopes"=>$this->getAccountScopes() ]);
-//        $this->addLog("Add",1,Access_keys::where('token',$request->header('Authorization'))->first()->id,$accessKey->id);
-        return response()->json([
-            'code' => "Success",
-            'data' => $accessKey
-        ]);
+        return Helper::createErrorResponse("Access Key");
     }
     /**
      * Display the specified resource.
@@ -120,24 +104,15 @@ class AccessKeysController extends Controller
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                'code' => "Failed",
-                'message' => "Unauthorized operation"
-            ],400);
+            return Helper::errorResponse($validator->errors()->all());
         }
         $accessKey->update($validator->validated());
         $result = $accessKey->wasChanged();
         if ($result){
-            return response()->json([
-                "code"=>$result?"Success":"Error",
-                "message" => "Access Key updated successfully",
-                "data" => $accessKey,
-            ], 200);
+            Helper::addLog("Update",7,$accessKey->id);
+            return Helper::updatedResponse('Access Key',$accessKey);
         }
-        return response()->json([
-            "code"=>"Error",
-            "message" => "Unexpected error, the access key has not been updated"
-        ], 500);
+        return Helper::updatedErrorResponse('Access Key');
     }
 
     /**
@@ -149,10 +124,7 @@ class AccessKeysController extends Controller
     public function destroy($accessKey)
     {
         $accessKey->delete();
-        return response()->json([
-            "code"=>"Success",
-            "message" => "Access Key deleted successfully",
-        ], 200);
+        return Helper::deleteResponse('Access Key');
     }
     /**
      * Display a listing of the scopes.
@@ -163,7 +135,7 @@ class AccessKeysController extends Controller
     {
         return response()->json([
             "code"=>"Success",
-            "data" => $this->scopes(),
+            "data" => Helper::scopes(),
         ], 200);
     }
     private function generateToken($account)

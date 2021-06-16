@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\Forms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -46,7 +47,7 @@ class FormsController extends Controller
             $forms->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return $this->dataResponse($forms,$count,$filters);
+        return Helper::dataResponse($forms,$count,$filters);
     }
 
 
@@ -62,11 +63,11 @@ class FormsController extends Controller
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return $this->errorResponse($validator->errors()->all());
+            return Helper::errorResponse($validator->errors()->all());
         }
         $form = Forms::create($request->all());
-        $this->addLog("Add",4,$form->id);
-        return $this->createdResponse("form",$form);
+        Helper::addLog("Add",4,$form->id);
+        return Helper::createdResponse("form",$form);
     }
 
     /**
@@ -97,14 +98,14 @@ class FormsController extends Controller
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return $this->errorResponse($validator->errors()->all());
+            return Helper::errorResponse($validator->errors()->all());
         }
         $form->update($request->all());
         $result = $form->wasChanged();
         if ($result){
-            return $this->updatedResponse('Form',$form);
+            return Helper::updatedResponse('Form',$form);
         }
-        return $this->updatedErrorResponse('Form');
+        return Helper::updatedErrorResponse('Form');
 
     }
 
@@ -118,7 +119,7 @@ class FormsController extends Controller
     {
         $id = $forms->id;
         $forms->delete();
-        $this->addLog("Delete",4,$id);
+        Helper::addLog("Delete",4,$id);
         return response()->json([
             "code"=>"Success",
             "message" => "Form deleted successfully",

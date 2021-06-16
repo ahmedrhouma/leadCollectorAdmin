@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\Accounts;
 use App\Models\Contacts;
 use App\Models\Segments;
@@ -56,7 +57,7 @@ class ContactsController extends Controller
             $contacts->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-         return $this->dataResponse($contacts,$count,$filters);
+         return Helper::dataResponse($contacts,$count,$filters);
     }
 
     /**
@@ -71,7 +72,7 @@ class ContactsController extends Controller
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return $this->errorResponse($validator->errors()->all());
+            return Helper::errorResponse($validator->errors()->all());
         }
         $requestData = $request->all();
         $requestData['user_type'] = array_search($request->user_type,[1=>'client',2=>'lead',3=>'competitor']);
@@ -79,8 +80,8 @@ class ContactsController extends Controller
         $requestData['status'] = 1;
         $contact = Contacts::create($requestData);
         $contact->refresh();
-        $this->addLog("Add",4,$contact->id);
-        return $this->createdResponse("contact",$contact);
+        Helper::addLog("Add",4,$contact->id);
+        return Helper::createdResponse("contact",$contact);
     }
 
     /**
@@ -106,11 +107,11 @@ class ContactsController extends Controller
      */
     public function update(Request $request,Contacts $contact)
     {
-        $validator = Validator::make($request->all(), ['account_id' => 'required','user_type' => ['required','in:client,lead,competitor'],'gender' => ['required','in:male,female'],'first_name' => 'required','last_name' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['account_id' => 'required|exists:accounts,id','user_type' => ['required','in:client,lead,competitor'],'gender' => ['required','in:male,female'],'first_name' => 'required','last_name' => 'required'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return $this->errorResponse($validator->errors()->all());
+            return Helper::errorResponse($validator->errors()->all());
         }
         $account = Accounts::find($request->account_id);
         if ($account == NULL){
@@ -148,7 +149,7 @@ class ContactsController extends Controller
     {
         $id = $contact->id;
         $contact->delete();
-        $this->addLog("Delete",4,$id);
+        Helper::addLog("Delete",4,$id);
         return response()->json([
             "code"=>"Success",
             "message" => "Contact deleted successfully",
@@ -166,7 +167,7 @@ class ContactsController extends Controller
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return $this->errorResponse($validator->errors()->all());
+            return Helper::errorResponse($validator->errors()->all());
         }
         $segment = Segments::find($request->id_segment);
         $segment->contacts()->attach($request->id_contact);
@@ -193,7 +194,7 @@ class ContactsController extends Controller
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return $this->errorResponse($validator->errors()->all());
+            return Helper::errorResponse($validator->errors()->all());
         }
         $segment = Segments::find($request->id_segment);
         $result = $segment->contacts()->detach($request->id_contact);

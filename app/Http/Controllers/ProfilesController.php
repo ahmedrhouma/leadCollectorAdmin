@@ -7,6 +7,7 @@ use App\Models\Contacts;
 use App\Models\Profiles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Helper\Helper;
 
 class ProfilesController extends Controller
 {
@@ -52,7 +53,7 @@ class ProfilesController extends Controller
             $profiles->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return $this->dataResponse($profiles,$count,$filters);
+        return Helper::dataResponse($profiles,$count,$filters);
     }
 
     /**
@@ -63,21 +64,11 @@ class ProfilesController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), ['account_id' => 'required','user_type' => ['required','in:client,lead,competitor'],'gender' => ['required','in:male,female'],'first_name' => 'required','last_name' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['account_id' => 'required|exists:accounts,id','user_type' => ['required','in:client,lead,competitor'],'gender' => ['required','in:male,female'],'first_name' => 'required','last_name' => 'required'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                'code' => "Failed",
-                'data' => $validator->errors()
-            ],400);
-        }
-        $account = Accounts::find($request->account_id);
-        if ($account == NULL){
-            return response()->json([
-                'code' => "Failed",
-                'message' => "Account not found"
-            ],400);
+            return Helper::errorResponse($validator->errors()->all());
         }
         $requestData = $request->all();
         $requestData['user_type'] = array_search($request->user_type,[1=>'client',2=>'lead',3=>'competitor']);
@@ -85,22 +76,11 @@ class ProfilesController extends Controller
         $requestData['status'] = 1;
         $contact = Contacts::create($requestData);
         $contact->refresh();
-        $this->addLog("Add",7,$contact->id);
-        return response()->json([
-            'code' => "Success",
-            'data' => $contact
-        ],200);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        if ($contact){
+            Helper::addLog("Add",7,$contact->id);
+            return Helper::createdResponse("Contact",$contact);
+        }
+        return Helper::createErrorResponse("Contact");
     }
 
     /**
@@ -115,17 +95,10 @@ class ProfilesController extends Controller
         $profile->update($request->all());
         $result = $profile->wasChanged();
         if ($result){
-            $this->addLog("Delete",7,$profile->id);
-            return response()->json([
-                "code"=>"Success",
-                "message" => "Profile updated successfully",
-                "data" => $profile,
-            ], 200);
+            Helper::addLog("Delete",7,$profile->id);
+            return Helper::updatedResponse('Profile',$profile);
         }
-        return response()->json([
-            "code"=>"Failed",
-            "message" =>"Failed to update Profile : Nothing to update",
-        ], 400);
+        return Helper::updatedErrorResponse('Profile');
     }
 
     /**
@@ -138,10 +111,7 @@ class ProfilesController extends Controller
     {
         $id = $profile->id;
         $profile->delete();
-        $this->addLog("Delete",7,$id);
-        return response()->json([
-            "code"=>"Success",
-            "message" => "Profile deleted successfully",
-        ], 200);
+        Helper::addLog("Delete",7,$id);
+        return Helper::deleteResponse('Profile');
     }
 }

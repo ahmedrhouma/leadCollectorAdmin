@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\Accounts;
 use App\Models\Fields;
 use Illuminate\Http\Request;
@@ -31,15 +32,7 @@ class FieldsController extends Controller
             $fields->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return response()->json([
-            'code' => 'success',
-            'data' => $fields,
-            "meta" => [
-                "total" => $count,
-                "links" => "",
-                "filters" => $filters
-            ]
-        ]);
+        return Helper::dataResponse($fields,$count,$filters);
     }
 
     /**
@@ -50,14 +43,11 @@ class FieldsController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), ['account_id' => 'required','name' => 'required','format' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['account_id' => 'required|exists:accounts,id','name' => 'required','format' => 'required'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                'code' => "Failed",
-                'data' => $validator->errors()
-            ]);
+            return Helper::errorResponse($validator->errors()->all());
         }
         $account = Accounts::find($request->account_id);
         if ($account == NULL){
@@ -71,7 +61,7 @@ class FieldsController extends Controller
         $requestData['tag'] = "tag";
         $field = Fields::create($requestData);
         $field->refresh();
-        $this->addLog("Add",5,$field->id);
+        Helper::addLog("Add",5,$field->id);
         return response()->json([
             'code' => "Success",
             'data' => $field
@@ -102,14 +92,11 @@ class FieldsController extends Controller
      */
     public function update(Request $request,Fields $field)
     {
-        $validator = Validator::make($request->all(), ['account_id' => 'required','name' => 'required','format' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['account_id' => 'required|exists:accounts,id','name' => 'required','format' => 'required'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                'code' => "Failed",
-                'data' => $validator->errors()
-            ]);
+            return Helper::errorResponse($validator->errors()->all());
         }
         $account = Accounts::find($request->account_id);
         if ($account == NULL){
@@ -143,7 +130,7 @@ class FieldsController extends Controller
     {
         $id = $field->id;
         $field->delete();
-        $this->addLog("Delete",3,$id);
+        Helper::addLog("Delete",3,$id);
         return response()->json([
             "code"=>"Success",
             "message" => "Contact deleted successfully",

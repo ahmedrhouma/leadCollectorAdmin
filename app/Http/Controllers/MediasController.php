@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Medias;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Helper\Helper;
 
 class MediasController extends Controller
 {
@@ -42,7 +43,7 @@ class MediasController extends Controller
             $medias->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return $this->dataResponse($medias,$count,$filters);
+        return Helper::dataResponse($medias,$count,$filters);
     }
 
     /**
@@ -57,16 +58,13 @@ class MediasController extends Controller
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                'code' => "Failed",
-                'data' => $validator->errors()
-            ]);
+            return Helper::errorResponse($validator->errors()->all());
         }
         $media = Medias::create($request->all());
-        return response()->json([
-            'code' => "Failed",
-            'data' => $media
-        ]);
+        if ($media){
+            return Helper::createdResponse("Media",$media);
+        }
+        return Helper::createErrorResponse("Media");
     }
 
     /**
@@ -96,11 +94,10 @@ class MediasController extends Controller
         ]);
         $media->update($validator->validated());
         $result = $media->wasChanged();
-        return response()->json([
-            "code"=>$result?"Success":"Error",
-            "message" => $result?"Media updated successfully":"Failed to update Media",
-            "data" => $result?$media:$validator->errors(),
-        ], 200);
+        if ($result){
+            return Helper::updatedResponse('Media',$media);
+        }
+        return Helper::updatedErrorResponse('Media');
     }
 
     /**
@@ -112,9 +109,6 @@ class MediasController extends Controller
     public function destroy(Medias $media)
     {
         $media->delete();
-        return response()->json([
-            "code"=>"Success",
-            "message" => "Media deleted successfully",
-        ], 200);
+        return Helper::deleteResponse('Media');
     }
 }

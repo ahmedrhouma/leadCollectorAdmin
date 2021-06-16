@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Accounts;
 use App\Models\Segments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Helper\Helper;
 
 class SegmentsController extends Controller
 {
@@ -27,7 +27,7 @@ class SegmentsController extends Controller
             $segments->where('account_id', '=', $request->account_id);
             $filters['account_id'] = $request->account_id;
         }
-        return $this->dataResponse($segments,$count,$filters);
+        return Helper::dataResponse($segments,$count,$filters);
     }
 
     /**
@@ -42,15 +42,15 @@ class SegmentsController extends Controller
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
-            return $this->errorResponse($validator->errors()->all());
+            return Helper::errorResponse($validator->errors()->all());
         }
         $segment = Segments::create($request->all());
         $segment->refresh();
-        $this->addLog("Add",10,$segment->id);
-        return response()->json([
-            'code' => "Success",
-            'data' => $segment
-        ],200);
+        if ($segment){
+            Helper::addLog("Add",10,$segment->id);
+            return Helper::createdResponse("Segment",$segment);
+        }
+        return Helper::createErrorResponse("Segment");
     }
 
     /**
@@ -76,17 +76,10 @@ class SegmentsController extends Controller
         $segment->update($request->all());
         $result = $segment->wasChanged();
         if ($result){
-            $this->addLog("Update",10,$segment->id);
-            return response()->json([
-                "code"=>"Success",
-                "message" => "Segment updated successfully",
-                "data" => $segment,
-            ], 200);
+            Helper::addLog("Update",10,$segment->id);
+            return Helper::updatedResponse('Segment',$segment);
         }
-        return response()->json([
-            "code"=>"Failed",
-            "message" =>"Failed to update Segment : Nothing to update",
-        ], 400);
+        return Helper::updatedErrorResponse('Segment');
     }
 
     /**
@@ -99,7 +92,7 @@ class SegmentsController extends Controller
     {
         $id = $segment->id;
         $segment->delete();
-        $this->addLog("Delete",10,$id);
+        Helper::addLog("Delete",10,$id);
         return response()->json([
             "code"=>"Success",
             "message" => "Segment deleted successfully",
