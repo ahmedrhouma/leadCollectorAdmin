@@ -54,8 +54,9 @@ class AccountsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function store(Request $request)
     {
@@ -68,7 +69,7 @@ class AccountsController extends Controller
         $account = Accounts::create($request->all());
         $accessKey = Access_keys::create(["token"=>Helper::generateToken($account),"status"=>1,"account_id"=>$account->id,"scopes"=> Helper::getAccountScopes()]);
         if ($accessKey){
-            Helper::addLog("Add",10,$accessKey->id);
+            //Helper::addLog("Add",10,$accessKey->id);
             return Helper::createdResponse("Access Key",$accessKey);
         }
         return Helper::createErrorResponse("Access Key");
@@ -102,25 +103,14 @@ class AccountsController extends Controller
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->errors()){
-            return response()->json([
-                "code"=>"Failed",
-                "message" =>"Failed to update Account",
-                "data" => $validator->errors(),
-            ], 200);
+            return Helper::errorResponse($validator->errors()->all());
         }
         $account->update($validator->validated());
         $result = $account->wasChanged();
         if ($result){
-            return response()->json([
-                "code"=>"Success",
-                "message" => "Account updated successfully",
-                "data" => $account,
-            ], 200);
+            return Helper::updatedResponse('Account',$account);
         }
-        return response()->json([
-            "code"=>"Failed",
-            "message" =>"Failed to update Account : Nothing to update",
-        ], 200);
+        return Helper::updatedErrorResponse('Account');
     }
 
     /**
@@ -131,22 +121,10 @@ class AccountsController extends Controller
     public function destroy(Accounts $account)
     {
         $account->delete();
-        return response()->json([
-            "code"=>"Success",
-            "message" => "Account deleted successfully",
-        ], 200);
+        if (is_null($account)){
+            return Helper::deleteResponse('Account');
+        }
+        return Helper::deleteErrorResponse('Account');
     }
-    private function generateToken($account)
-    {
-        $configuration = Configuration::forSymmetricSigner(
-            new Sha256(),
-            InMemory::base64Encoded('mBC5v1sOKVvbdEitdSBenu59nfNfhwkedkJVNabosTw=')
-        );
-        $now   = new DateTimeImmutable();
-        $token = $configuration->builder()
-            ->issuedAt($now)
-            ->withClaim('uid', $account->id)
-            ->getToken($configuration->signer(), $configuration->signingKey());
-         return $token->toString();
-    }
+
 }

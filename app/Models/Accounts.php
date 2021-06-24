@@ -19,6 +19,13 @@ class Accounts extends Model
     {
         return $this->hasMany(Access_keys::class,'account_id');
     }
+    /**
+     * Get the accessKeys associated with the Account.
+     */
+    public function channels()
+    {
+        return $this->hasMany(Channels::class,'account_id');
+    }
     public function delete()
     {
         $this->keys()->delete();

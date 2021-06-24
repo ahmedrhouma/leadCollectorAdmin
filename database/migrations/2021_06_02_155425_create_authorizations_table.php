@@ -15,7 +15,7 @@ class CreateAuthorizationsTable extends Migration
     {
         Schema::create('authorizations', function (Blueprint $table) {
             $table->id();
-            $table->string('token',255);
+            $table->string('token',355);
             $table->tinyInteger('status');
             $table->foreignId('account_id')->constrained('accounts')->onDelete('cascade');
             $table->foreignId('media_id')->constrained('medias');

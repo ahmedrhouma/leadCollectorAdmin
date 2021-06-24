@@ -117,6 +117,9 @@ class RespondersController extends Controller
         $id = $responder->id;
         $responder->delete();
         Helper::addLog("Delete",10,$id);
-        return Helper::deleteResponse('Responder');
+        if (is_null($responder)){
+            return Helper::deleteResponse('Responder');
+        }
+        return Helper::deleteErrorResponse('Responder');
     }
 }

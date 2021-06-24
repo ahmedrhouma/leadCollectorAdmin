@@ -122,6 +122,9 @@ class QuestionsController extends Controller
         $id = $questions->id;
         $questions->delete();
         Helper::addLog("Delete",4,$id);
-        return Helper::deleteResponse('Question');
+        if (is_null($questions)){
+            return Helper::deleteResponse('Question');
+        }
+        return Helper::deleteErrorResponse('Question');
     }
 }

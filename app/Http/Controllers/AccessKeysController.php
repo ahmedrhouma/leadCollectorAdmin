@@ -70,9 +70,9 @@ class AccessKeysController extends Controller
             return Helper::errorResponse($validator->errors()->all());
         }
         $account = Accounts::find($request->account_id);
-        $accessKey = Access_keys::create(["token"=>Helper::generateToken($account),"status"=>1,"account_id"=>$account->id,"scopes"=>Helper::getAccountScopes() ]);
+        $accessKey = Access_keys::create(["token"=>Helper::generateToken($account),"status"=>1,"account_id"=>$account->id,"scopes"=>$request->scopes,"role"=>$request->role ]);
         if ($accessKey){
-            return Helper::createdResponse("Access Key",$accessKey);
+            return Helper::createdResponse("Access Key",$accessKey) ;
         }
         return Helper::createErrorResponse("Access Key");
     }

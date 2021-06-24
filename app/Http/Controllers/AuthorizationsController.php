@@ -64,25 +64,11 @@ class AuthorizationsController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), ['token' => 'required', 'account_id' => 'required|exists:accounts,id', 'media_id' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['token' => 'required', 'account_id' => 'required|exists:accounts,id', 'media_id' => 'required|exists:medias,id'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
             return Helper::errorResponse($validator->errors()->all());
-        }
-        $account = Accounts::find($request->account_id);
-        if ($account == NULL){
-            return response()->json([
-                'code' => "Failed",
-                'message' => "Account not find"
-            ]);
-        }
-        $media = Medias::find($request->media_id);
-        if ($media == NULL){
-            return response()->json([
-                'code' => "Failed",
-                'message' => "Media not find"
-            ]);
         }
         $authorization = Authorizations::create(["token"=> $request->token ,"account_id"=> $request->account_id ,"media_id"=> $request->media_id ,"status"=> 1]);
         Helper::addLog("Add",1,$authorization->id);
@@ -116,16 +102,18 @@ class AuthorizationsController extends Controller
      */
     public function update(Request $request, $authorizations)
     {
-        $validator = Validator::make($request->all(), ['token' => 'required', 'status' => 'required', 'account_id' => 'required|exists:accounts,id', 'media_id' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['token' => 'required', 'status' => 'required', 'account_id' => 'required|exists:accounts,id', 'media_id' => 'required|exists:medias,id'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
+        if ($validator->errors()){
+            return Helper::errorResponse($validator->errors()->all());
+        }
         $authorizations->update($validator->validated());
         $result = $authorizations->wasChanged();
-        return response()->json([
-            "code"=>$result?"Success":"Error",
-            "message" => $result?"Authorization updated successfully":"Failed to update Authorization",
-            "data" => $result?$authorizations:$validator->errors(),
-        ], 200);
+        if ($result){
+            return Helper::updatedResponse('Authorization',$authorizations);
+        }
+        return Helper::updatedErrorResponse('Authorization');
     }
 
     /**
@@ -137,9 +125,9 @@ class AuthorizationsController extends Controller
     public function destroy($authorizations)
     {
         $authorizations->delete();
-        return response()->json([
-            "code"=>"Success",
-            "message" => "Authorization deleted successfully",
-        ], 200);
+        if (is_null($authorizations)){
+            return Helper::deleteResponse('Authorization');
+        }
+        return Helper::deleteErrorResponse('Authorization');
     }
 }

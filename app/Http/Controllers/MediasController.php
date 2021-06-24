@@ -109,6 +109,9 @@ class MediasController extends Controller
     public function destroy(Medias $media)
     {
         $media->delete();
-        return Helper::deleteResponse('Media');
+        if (is_null($media)){
+            return Helper::deleteResponse('Media');
+        }
+        return Helper::deleteErrorResponse('Media');
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Access_keys;
 use App\Models\Accounts;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
@@ -13,6 +14,10 @@ use Lcobucci\JWT\Signer\Key\InMemory;
 class EnsureTokenIsValid
 {
     private $adminToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW5PZlRoaXNBcGkifQ.BeRDf175mx7Cyd-6MgqFjwUHJXbMUMMMnYHxc5w4LrQ";
+    public function __construct()
+    {
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -22,13 +27,14 @@ class EnsureTokenIsValid
      */
     public function handle(Request $request, Closure $next)
     {
-
-        $nextRequest = $next($request);
         if (!$request->header('Authorization') ) {
-            dd('Invalid token');
+            return response()->json([
+                'code' => 'Error',
+                'message' => "Invalid token !"
+            ]);
         }
         if ($request->header('Authorization') == $this->adminToken){
-            return $nextRequest;
+            return $next($request);
         }
         $config = Configuration::forSymmetricSigner(
             new Sha256(),
@@ -68,6 +74,6 @@ class EnsureTokenIsValid
         }
         \Session::put('account_id', $account->id);
         \Session::put('accessKey_id', $scope->id);
-        return $nextRequest;
+        return $next($request);
     }
 }

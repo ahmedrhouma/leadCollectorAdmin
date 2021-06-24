@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccountsController;
+use Laravel\Socialite\Facades\Socialite;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,5 +18,5 @@ use App\Http\Controllers\AccountsController;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('/test', [AccountsController::class, 'test']);
+Route::get('/facebook/login',[\App\Http\Controllers\FacebookController::class,'login'])->name('facebookLogin');
+Route::get('/facebook/callback',[\App\Http\Controllers\FacebookController::class,'callback']);

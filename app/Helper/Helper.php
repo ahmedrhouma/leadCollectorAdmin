@@ -5,6 +5,10 @@ namespace App\Helper;
 
 
 use App\Models\Logs;
+use DateTimeImmutable;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Key\InMemory;
 
 class Helper
 {
@@ -13,7 +17,8 @@ class Helper
      * @param $element
      * @param $element_id
      */
-    function addLog($action,$element,$element_id){
+    static function addLog($action,$element,$element_id){
+        dd(\Session::get('accessKey_id'));
         Logs::create(["action"=>$action,"element"=>$element,"access_id"=>\Session::get('accessKey_id'),"element_id"=>$element_id]);
     }
 
@@ -23,7 +28,7 @@ class Helper
      * @param array $filters
      * @return \Illuminate\Http\Response
      */
-    function dataResponse(Array $data,$total,Array $filters){
+static function dataResponse(Array $data,$total,Array $filters){
         return response()->json([
             'code' => 'success',
             'data' => $data,
@@ -40,7 +45,7 @@ class Helper
      * @param $element
      * @return \Illuminate\Http\Response
      */
-    function createdResponse($name,$element){
+    static function createdResponse($name,$element){
         return response()->json([
             'code' => "Success",
             'message' => "$name created successfully",
@@ -52,7 +57,7 @@ class Helper
      * @param array $details
      * @return \Illuminate\Http\Response
      */
-    function errorResponse(Array $details){
+static function errorResponse(Array $details){
         return response()->json([
             'code' => "Error",
             'message' => "Required fields not filled or formats not recognized !",
@@ -64,7 +69,7 @@ class Helper
      * @param String $name
      * @return \Illuminate\Http\Response
      */
-    function createErrorResponse($name){
+static function createErrorResponse($name){
         return response()->json([
             'code' => "Error",
             'message' => "Unexpected error, the $name has not been created."
@@ -74,7 +79,7 @@ class Helper
      * @param String $name
      * @return \Illuminate\Http\Response
      */
-    function updatedResponse($name,$element){
+static function updatedResponse($name,$element){
         return response()->json([
             'code' => "Error",
             'message' => "$name updated successfully.",
@@ -85,7 +90,7 @@ class Helper
      * @param String $name
      * @return \Illuminate\Http\Response
      */
-    function updatedErrorResponse($name){
+static function updatedErrorResponse($name){
         return response()->json([
             'code' => "Error",
             'message' => "Failed to update $name : Nothing to update."
@@ -95,13 +100,33 @@ class Helper
      * @param String $name
      * @return \Illuminate\Http\Response
      */
-    function deleteResponse($name){
+static function deleteResponse($name){
         return response()->json([
             'code' => "Success",
             'message' => "$name deleted successfully"
         ],200);
     }
-    function getAccountScopes(){
+
+    /**
+     * Create token of account
+     * @param $account
+     * @return string
+     * @throws \Exception
+     */
+    static function generateToken($account)
+    {
+        $configuration = Configuration::forSymmetricSigner(
+            new Sha256(),
+            InMemory::base64Encoded('mBC5v1sOKVvbdEitdSBenu59nfNfhwkedkJVNabosTw=')
+        );
+        $now   = new DateTimeImmutable();
+        $token = $configuration->builder()
+            ->issuedAt($now)
+            ->withClaim('uid', $account->id)
+            ->getToken($configuration->signer(), $configuration->signingKey());
+        return $token->toString();
+    }
+    static function getAccountScopes(){
         return json_encode([
             "contacts.addToSegment",
             "contacts.deleteFromSegment",

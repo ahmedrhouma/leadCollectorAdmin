@@ -112,6 +112,9 @@ class ProfilesController extends Controller
         $id = $profile->id;
         $profile->delete();
         Helper::addLog("Delete",7,$id);
-        return Helper::deleteResponse('Profile');
+        if (is_null($profile)){
+            return Helper::deleteResponse('Profile');
+        }
+        return Helper::deleteErrorResponse('Profile');
     }
 }

@@ -93,9 +93,9 @@ class SegmentsController extends Controller
         $id = $segment->id;
         $segment->delete();
         Helper::addLog("Delete",10,$id);
-        return response()->json([
-            "code"=>"Success",
-            "message" => "Segment deleted successfully",
-        ], 200);
+        if (is_null($segment)){
+            return Helper::deleteResponse('Segment');
+        }
+        return Helper::deleteErrorResponse('Segment');
     }
 }
