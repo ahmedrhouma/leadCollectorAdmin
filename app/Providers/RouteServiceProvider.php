@@ -17,7 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/home';
+    public const HOME = '/dashboard';
     //public $middleware = ['\App\Http\Middleware\EnsureTokenIsValid'];
     /**
      * The controller namespace for the application.

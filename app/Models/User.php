@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'account_id'
     ];
 
     /**
@@ -31,7 +32,13 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
+    /**
+     * Get the account associated with the User.
+     */
+    public function account()
+    {
+        return $this->belongsTo(Accounts::class,'account_id');
+    }
     /**
      * The attributes that should be cast to native types.
      *

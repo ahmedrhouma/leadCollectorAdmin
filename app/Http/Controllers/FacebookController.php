@@ -5,19 +5,33 @@ namespace App\Http\Controllers;
 use App\Models\Accounts;
 use App\Models\Authorizations;
 use App\Models\Channels;
+use App\Models\Medias;
+use App\Models\Messages;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
+
 class FacebookController extends Controller
 {
+    private $token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImZhY2Vib29rVG9rZW4iLCJpYXQiOjE1MTYyMzkwMjJ9.44R9jrg3VVNWV2_p9uJNoeUXXoLWHf7gfNFA3UeVELs";
+
     /**
-     * Facebook login page.
+     * Facebook receive webHooks.
      */
-    public function login()
+    public function receive(Request $request)
     {
-        $facebookUrl = Socialite::driver('facebook')->scopes(['public_profile,pages_show_list,pages_messaging,pages_read_engagement,pages_manage_cta,pages_manage_metadata'])->redirect()->getTargetUrl();
-        $channels = Channels::where(['account_id'=>1,'media_id'=> 1])->get();
-        return view('pagesList',['facebookPages'=>$channels,'url'=>$facebookUrl,'total'=>count($channels)]);
+        $message =  Messages::create(['content'=>json_encode($request->all())]);
+        $mode = $request->hub_mode;
+        $token = $request->hub_verify_token;
+        $challenge = $request->hub_challenge;
+        if ($mode && $token) {
+            if ($mode === 'subscribe' && $token === $this->token) {
+                return response($request->hub_challenge, 200);
+            } else {
+                return response('', 403);
+            }
+        }
     }
+
     /**
      * Facebook callback page.
      */
@@ -31,25 +45,26 @@ class FacebookController extends Controller
         ]);
         try {
             $response = $fb->get('/me/accounts', $user->token);
-        } catch(\Facebook\Exceptions\FacebookResponseException $e) {
+        } catch (\Facebook\Exceptions\FacebookResponseException $e) {
             echo 'Graph returned an error: ' . $e->getMessage();
             exit;
-        } catch(\Facebook\Exceptions\FacebookSDKException $e) {
+        } catch (\Facebook\Exceptions\FacebookSDKException $e) {
             echo 'Facebook SDK returned an error: ' . $e->getMessage();
             exit;
         }
+        //$account = auth()->user()->account()->first();
         $data = $response->getDecodedBody();
-        $existedChannels = Accounts::find(1)->channels->pluck('identifier')->all();
-        foreach ($data['data'] as &$page){
-            $picture = $fb->get("/".$page['id']."/picture?type=small&redirect=false", $user->token);
+        $existedChannels = Accounts::find(4)->channels->pluck('identifier')->all();
+        foreach ($data['data'] as &$page) {
+            $picture = $fb->get("/" . $page['id'] . "/picture?type=small&redirect=false", $user->token);
             $picture = $picture->getDecodedBody();
             $page['pictureUrl'] = $picture['data']['url'];
-            $authorization = Authorizations::create(['token'=>$page['access_token'],'status'=>1,'account_id'=>1,'media_id'=>1]);
-            if (!in_array($page['id'],$existedChannels)){
-                Channels::create(['identifier'=>$page['id'],'name'=>$page['name'],'picture'=>$picture['data']['url'],'status'=>1,'account_id'=>1,'media_id'=>1,'authorization_id'=>$authorization->id]);
+            $authorization = Authorizations::create(['token' => $page['access_token'], 'status' => 1, 'account_id' => 4, 'media_id' => Medias::where('tag', 'facebook')->first()->id]);
+            if (!in_array($page['id'], $existedChannels)) {
+                Channels::create(['identifier' => $page['id'], 'name' => $page['name'], 'picture' => $picture['data']['url'], 'status' => 1, 'account_id' => 4, 'media_id' => Medias::where('tag', '{facebook}')->first()->id, 'authorization_id' => $authorization->id]);
             }
         }
-        Accounts::find(1)->channels()->whereNotIn('identifier',array_column($data['data'],'id'))->delete();
-        return redirect()->route('facebookLogin');
+        Accounts::find(4)->channels()->whereNotIn('identifier', array_column($data['data'], 'id'))->delete();
+        return redirect()->route('channels');
     }
 }

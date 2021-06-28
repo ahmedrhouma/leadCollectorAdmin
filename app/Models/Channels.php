@@ -11,4 +11,11 @@ class Channels extends Model
     protected $guarded = [
         'id'
     ];
+    /**
+     * Get the accessKeys associated with the Account.
+     */
+    public function media()
+    {
+        return $this->belongsTo(Medias::class,'media_id');
+    }
 }

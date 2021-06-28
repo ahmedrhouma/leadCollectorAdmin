@@ -18,5 +18,8 @@ use Laravel\Socialite\Facades\Socialite;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/facebook/login',[\App\Http\Controllers\FacebookController::class,'login'])->name('facebookLogin');
+Route::match(['get','post'],'/facebook/message',[\App\Http\Controllers\FacebookController::class,'receive'])->name('receive');
 Route::get('/facebook/callback',[\App\Http\Controllers\FacebookController::class,'callback']);
+Route::get('/dashboard',[\App\Http\Controllers\DashboardController::class,'index'])->name('dashboard');
+Route::get('/users',[\App\Http\Controllers\DashboardController::class,'users'])->name('users');
+Route::get('/channels',[\App\Http\Controllers\DashboardController::class,'channels'])->name('channels');
