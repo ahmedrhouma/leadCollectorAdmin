@@ -43,18 +43,11 @@ class FieldsController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), ['account_id' => 'required|exists:accounts,id','name' => 'required','format' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), [/*'account_id' => 'required|exists:accounts,id',*/'name' => 'required','format' => 'required'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
             return Helper::errorResponse($validator->errors()->all());
-        }
-        $account = Accounts::find($request->account_id);
-        if ($account == NULL){
-            return response()->json([
-                'code' => "Failed",
-                'message' => "Account not found"
-            ]);
         }
         $requestData = $request->all();
         $requestData['status'] = 1;

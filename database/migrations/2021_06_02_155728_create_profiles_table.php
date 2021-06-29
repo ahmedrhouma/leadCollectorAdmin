@@ -18,8 +18,8 @@ class CreateProfilesTable extends Migration
             $table->string('identifier',255);
             $table->string('username',255);
             $table->string('picture',255);
-            $table->string('email',128);
-            $table->string('phone',64);
+            $table->string('email',128)->nullable();
+            $table->string('phone',64)->nullable();
             $table->tinyInteger('status');
             $table->foreignId('contact_id')->constrained('contacts')->onDelete('cascade');
             $table->foreignId('channel_id')->constrained('channels');

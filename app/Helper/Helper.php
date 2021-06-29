@@ -17,9 +17,9 @@ class Helper
      * @param $element
      * @param $element_id
      */
-    static function addLog($action,$element,$element_id){
-        dd(\Session::get('accessKey_id'));
-        Logs::create(["action"=>$action,"element"=>$element,"access_id"=>\Session::get('accessKey_id'),"element_id"=>$element_id]);
+    static function addLog($action, $element, $element_id)
+    {
+        Logs::create(["action" => $action, "element" => $element, "access_id" => \Session::get('accessKey_id'), "element_id" => $element_id]);
     }
 
     /**
@@ -28,7 +28,8 @@ class Helper
      * @param array $filters
      * @return \Illuminate\Http\Response
      */
-static function dataResponse(Array $data,$total,Array $filters){
+    static function dataResponse(Array $data, $total, Array $filters)
+    {
         return response()->json([
             'code' => 'success',
             'data' => $data,
@@ -37,7 +38,7 @@ static function dataResponse(Array $data,$total,Array $filters){
                 "links" => "",
                 "filters" => $filters
             ]
-        ],200);
+        ], 200);
     }
 
     /**
@@ -45,66 +46,75 @@ static function dataResponse(Array $data,$total,Array $filters){
      * @param $element
      * @return \Illuminate\Http\Response
      */
-    static function createdResponse($name,$element){
+    static function createdResponse($name, $element)
+    {
         return response()->json([
             'code' => "Success",
             'message' => "$name created successfully",
             'data' => $element
-        ],201);
+        ], 201);
     }
 
     /**
      * @param array $details
      * @return \Illuminate\Http\Response
      */
-static function errorResponse(Array $details){
+    static function errorResponse(Array $details)
+    {
         return response()->json([
             'code' => "Error",
             'message' => "Required fields not filled or formats not recognized !",
             'details' => $details
-        ],400);
+        ], 400);
     }
 
     /**
      * @param String $name
      * @return \Illuminate\Http\Response
      */
-static function createErrorResponse($name){
+    static function createErrorResponse($name)
+    {
         return response()->json([
             'code' => "Error",
             'message' => "Unexpected error, the $name has not been created."
-        ],500);
+        ], 500);
     }
+
     /**
      * @param String $name
      * @return \Illuminate\Http\Response
      */
-static function updatedResponse($name,$element){
+    static function updatedResponse($name, $element)
+    {
         return response()->json([
             'code' => "Error",
             'message' => "$name updated successfully.",
             'data' => $element
-        ],200);
+        ], 200);
     }
+
     /**
      * @param String $name
      * @return \Illuminate\Http\Response
      */
-static function updatedErrorResponse($name){
+    static function updatedErrorResponse($name)
+    {
         return response()->json([
             'code' => "Error",
             'message' => "Failed to update $name : Nothing to update."
-        ],400);
+        ], 400);
     }
+
     /**
      * @param String $name
      * @return \Illuminate\Http\Response
      */
-static function deleteResponse($name){
+    static function deleteResponse($name)
+    {
         return response()->json([
             'code' => "Success",
             'message' => "$name deleted successfully"
-        ],200);
+        ], 200);
     }
 
     /**
@@ -119,14 +129,34 @@ static function deleteResponse($name){
             new Sha256(),
             InMemory::base64Encoded('mBC5v1sOKVvbdEitdSBenu59nfNfhwkedkJVNabosTw=')
         );
-        $now   = new DateTimeImmutable();
+        $now = new DateTimeImmutable();
         $token = $configuration->builder()
             ->issuedAt($now)
             ->withClaim('uid', $account->id)
             ->getToken($configuration->signer(), $configuration->signingKey());
         return $token->toString();
     }
-    static function getAccountScopes(){
+
+    /**
+     * @param String $gender
+     * @return int
+     */
+    static function getGender($gender)
+    {
+        switch ($gender){
+            case "male":
+                return 1;
+                break;
+            case "female":
+                return 2;
+                break;
+            default:
+                return 0;
+                break;
+        }
+    }
+    static function getAccountScopes()
+    {
         return json_encode([
             "contacts.addToSegment",
             "contacts.deleteFromSegment",

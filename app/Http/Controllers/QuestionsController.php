@@ -66,6 +66,7 @@ class QuestionsController extends Controller
         }
         $data = $request->all();
         $data['response'] = $data['response']==true?1:0;
+        $data['status'] = 1;
         $question = Questions::create($data);
         if ($question){
             Helper::addLog("Add",4,$question->id);

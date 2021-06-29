@@ -20,7 +20,8 @@ class CreateQuestionsTable extends Migration
             $table->char('response_type',5)->nullable();
             $table->tinyInteger('status',false,true);
             $table->tinyInteger('order',false,true);
-            $table->foreignId('responder_id')->constrained('responders')->onDelete('cascade');
+            $table->foreignId('responder_id')->constrained('responders');
+            $table->foreignId('field_id')->constrained('fields');
             $table->timestamps();
         });
     }

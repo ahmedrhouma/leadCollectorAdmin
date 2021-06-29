@@ -19,7 +19,7 @@ class CreateFieldsTable extends Migration
             $table->string('tag',64);
             $table->string('format',32);
             $table->tinyInteger('status');
-            $table->foreignId('account_id')->constrained('accounts')->onDelete('cascade');
+            $table->foreignId('account_id')->constrained('accounts')->nullable();
             $table->timestamps();
         });
     }

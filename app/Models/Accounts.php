@@ -26,6 +26,13 @@ class Accounts extends Model
     {
         return $this->hasMany(Channels::class,'account_id');
     }
+    /**
+     * Get the responders associated with the Account.
+     */
+    public function responders()
+    {
+        return $this->hasMany(Responders::class,'account_id');
+    }
     public function delete()
     {
         $this->keys()->delete();

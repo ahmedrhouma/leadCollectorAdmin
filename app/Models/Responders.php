@@ -11,4 +11,16 @@ class Responders extends Model
     protected $guarded = [
         'id'
     ];
+
+    /**
+     * Get the questions associated with the Responder.
+     */
+    public function questions()
+    {
+        if ($this->type == 2) {
+            return $this->hasMany(Questions::class, 'responder_id');
+        } else {
+            return $this->hasMany(Forms::class, 'responder_id');
+        }
+    }
 }

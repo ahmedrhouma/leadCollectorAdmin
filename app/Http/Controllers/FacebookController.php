@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\Accounts;
 use App\Models\Authorizations;
 use App\Models\Channels;
+use App\Models\Contacts;
 use App\Models\Medias;
 use App\Models\Messages;
+use App\Models\Profiles;
+use App\Models\Requests;
+use App\Models\Responders;
+use App\Services\FacebookService;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -19,7 +25,6 @@ class FacebookController extends Controller
      */
     public function receive(Request $request)
     {
-        $message =  Messages::create(['content'=>json_encode($request->all())]);
         $mode = $request->hub_mode;
         $token = $request->hub_verify_token;
         $challenge = $request->hub_challenge;
@@ -30,6 +35,37 @@ class FacebookController extends Controller
                 return response('', 403);
             }
         }
+        $data = $request->all();
+        $channel = Channels::where('identifier',$data['entry'][0]['id'])->with(['authorization','responder'])->first();
+        $fb = new FacebookService();
+        $profile = Profiles::where('identifier' , $data['entry'][0]['messaging'][0]['sender']['id'])->first();
+        if ($profile == null){
+            $user = $fb->getUserProfile($data['entry'][0]['messaging'][0]['sender']['id'],$channel->authorization->token);
+            $contact = Contacts::create(
+                ['identifier' =>  $data['entry'][0]['messaging'][0]['sender']['id'],
+                'first_name' =>  $user['first_name'],
+                'last_name' => $user['last_name'],
+                'picture' =>  $user['profile_pic'],
+                'gender' =>  Helper::getGender($user['gender']),
+                'user_type' => 1,
+                'status' => 1,
+                'account_id' =>  $channel['account_id']]
+            );
+            $profile = Profiles::create(
+                ['identifier' =>  $data['entry'][0]['messaging'][0]['sender']['id'],
+                'username' =>  $user['name'],
+                'picture' =>  $user['profile_pic'],
+                'email' =>  isset($user['email'])?$user['email']:NULL,
+                'phone' =>  isset($user['phone'])?$user['phone']:NULL,
+                'contact_id' =>  $contact->id,
+                'channel_id' =>  $channel->id,
+                'status' =>  1]
+            );
+        }
+        $message = Messages::create(['content' => $data['entry'][0]['messaging'][0]['message']['text'],'contact_id'=> $profile->contact_id,'channel_id'=> $channel->id]);
+        $responder = new \App\Classes\Channel($channel) ;
+        $question = $responder->getNextQuestion($profile->contact_id);
+        $fb->sendMessage($data['entry'][0]['messaging'][0]['sender']['id'],$question,$channel->authorization->token);
     }
 
     /**
@@ -37,34 +73,20 @@ class FacebookController extends Controller
      */
     public function callback()
     {
+        $account = auth()->user()->account()->first();
         $user = Socialite::driver('facebook')->stateless()->user();
-        $fb = new \Facebook\Facebook([
-            'app_id' => env('FACEBOOK_APP_ID'),
-            'app_secret' => env('FACEBOOK_APP_SECRET'),
-            'default_graph_version' => env('FACEBOOK_DEFAULT_GRAPH_VERSION'),
-        ]);
-        try {
-            $response = $fb->get('/me/accounts', $user->token);
-        } catch (\Facebook\Exceptions\FacebookResponseException $e) {
-            echo 'Graph returned an error: ' . $e->getMessage();
-            exit;
-        } catch (\Facebook\Exceptions\FacebookSDKException $e) {
-            echo 'Facebook SDK returned an error: ' . $e->getMessage();
-            exit;
-        }
-        //$account = auth()->user()->account()->first();
-        $data = $response->getDecodedBody();
-        $existedChannels = Accounts::find(4)->channels->pluck('identifier')->all();
+        $fb = new FacebookService();
+        $data = $fb->getAccounts($user->token);
+        $existedChannels = $account->channels->pluck('identifier')->all();
         foreach ($data['data'] as &$page) {
-            $picture = $fb->get("/" . $page['id'] . "/picture?type=small&redirect=false", $user->token);
-            $picture = $picture->getDecodedBody();
+            $picture = $fb->getPicture($page['id'], $user->token);
             $page['pictureUrl'] = $picture['data']['url'];
-            $authorization = Authorizations::create(['token' => $page['access_token'], 'status' => 1, 'account_id' => 4, 'media_id' => Medias::where('tag', 'facebook')->first()->id]);
+            $authorization = Authorizations::create(['token' => $page['access_token'], 'status' => 1, 'account_id' => $account->id, 'media_id' => Medias::where('tag', 'facebook')->first()->id]);
             if (!in_array($page['id'], $existedChannels)) {
-                Channels::create(['identifier' => $page['id'], 'name' => $page['name'], 'picture' => $picture['data']['url'], 'status' => 1, 'account_id' => 4, 'media_id' => Medias::where('tag', '{facebook}')->first()->id, 'authorization_id' => $authorization->id]);
+                Channels::create(['identifier' => $page['id'], 'name' => $page['name'], 'picture' => $picture['data']['url'], 'status' => 1, 'account_id' => $account->id, 'media_id' => Medias::where('tag', 'facebook')->first()->id, 'authorization_id' => $authorization->id]);
             }
         }
-        Accounts::find(4)->channels()->whereNotIn('identifier', array_column($data['data'], 'id'))->delete();
+        $account->channels()->whereNotIn('identifier', array_column($data['data'], 'id'))->delete();
         return redirect()->route('channels');
     }
 }

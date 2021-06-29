@@ -29,13 +29,13 @@
                         <h5 class="card-title text-uppercase">No channel recorded !</h5>
                         <p class="text-muted">You'll need to connect pages and grant them the required permissions in
                             order for tokens to be generated</p>
-                        <a href="{{ $url }}" class="btn btn-primary">Add New channel</a>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add New channel</button>
                     </div>
                 </div>
             </div>
         @else
             @foreach($channels as $channel)
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-3 col-md-6 @if($channel['id_responder'] == null)bg-danger@endif">
                     <div class="card card-stats">
                         <!-- Card body -->
                         <div class="card-body">

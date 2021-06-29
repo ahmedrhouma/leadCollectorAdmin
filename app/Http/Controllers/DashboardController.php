@@ -23,7 +23,7 @@ class DashboardController extends Controller
                 $media['redirectUrl'] = $obj->getUrl();
             }
         }
-        return view('dashboard.channels',['channels'=>$channels,'medias'=>$medias]);
+        return view('dashboard.channels',['channels'=>$channels,'medias'=>$medias,'responders'=>auth()->user()->account()->first()->responders()]);
     }
     public function users()
     {
