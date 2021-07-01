@@ -11,4 +11,11 @@ class Questions extends Model
     protected $guarded = [
         'id'
     ];
+    /**
+     * Get the field associated with the Question.
+     */
+    public function field()
+    {
+        return $this->belongsTo(Fields::class,'field_id');
+    }
 }
