@@ -13,6 +13,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         '/facebook/message',
+        '/instagram/message',
         '/test'
     ];
 }

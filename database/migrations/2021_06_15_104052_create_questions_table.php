@@ -21,7 +21,7 @@ class CreateQuestionsTable extends Migration
             $table->tinyInteger('status',false,true);
             $table->tinyInteger('order',false,true);
             $table->foreignId('responder_id')->constrained('responders');
-            $table->foreignId('field_id')->constrained('fields');
+            $table->foreignId('field_id')->constrained('fields')->onDelete('cascade');
             $table->timestamps();
         });
     }

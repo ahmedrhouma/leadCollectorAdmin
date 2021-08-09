@@ -19,9 +19,10 @@ class CreateChannelsTable extends Migration
             $table->string('name',255);
             $table->string('picture',355);
             $table->unsignedTinyInteger('status');
-            $table->foreignId('account_id')->constrained('accounts')->onDelete('cascade');
-            $table->foreignId('media_id')->constrained('medias')->onDelete('cascade');
-            $table->foreignId('authorization_id')->constrained('authorizations')->onDelete('cascade');
+            $table->foreignId('account_id')->constrained('accounts');
+            $table->foreignId('media_id')->constrained('medias');
+            $table->foreignId('authorization_id')->constrained('authorizations');
+            $table->foreignId('responder_id')->constrained('responders');
             $table->timestamps();
             $table->date('end_at')->nullable();
         });

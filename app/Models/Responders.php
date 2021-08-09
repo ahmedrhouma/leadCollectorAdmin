@@ -20,7 +20,7 @@ class Responders extends Model
         if ($this->type == 2) {
             return $this->hasMany(Questions::class, 'responder_id');
         } else {
-            return $this->hasMany(Forms::class, 'responder_id');
+            return $this->hasOne(Forms::class, 'responder_id');
         }
     }
 }

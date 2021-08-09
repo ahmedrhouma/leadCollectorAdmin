@@ -27,6 +27,13 @@ class Accounts extends Model
         return $this->hasMany(Channels::class,'account_id');
     }
     /**
+     * Get the contacts associated with the Account.
+     */
+    public function contacts()
+    {
+        return $this->hasMany(Contacts::class,'account_id');
+    }
+    /**
      * Get the responders associated with the Account.
      */
     public function responders()

@@ -17,7 +17,6 @@ class CreateFormsTable extends Migration
             $table->id();
             $table->string('name',128);
             $table->text('content');
-            $table->string('url',255);
             $table->tinyInteger('status');
             $table->foreignId('responder_id')->constrained('responders')->onDelete('cascade');
             $table->timestamps();

@@ -19,6 +19,21 @@ return [
         'redirect' => env('FACEBOOK_REDIRECT'),
         'default_graph_version' => env('FACEBOOK_DEFAULT_GRAPH_VERSION'),
     ],
+    'instagrambasic' => [
+        'client_id' => env('INSTAGRAM_APP_ID'),
+        'client_secret' => env('INSTAGRAM_APP_SECRET'),
+        'redirect' => env('INSTAGRAM_REDIRECT'),
+    ],
+    'linkedin' => [
+        'client_id' => env('LINKEDIN_APP_ID'),
+        'client_secret' => env('LINKEDIN_APP_SECRET'),
+        'redirect' => env('LINKEDIN_REDIRECT'),
+    ],
+    'twitter' => [
+        'client_id' => env('TWITTER_APP_ID'),
+        'client_secret' => env('TWITTER_APP_SECRET'),
+        'redirect' => env('TWITTER_REDIRECT'),
+    ],
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),

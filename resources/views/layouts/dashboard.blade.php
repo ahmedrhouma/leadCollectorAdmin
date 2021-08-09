@@ -277,7 +277,7 @@
                            aria-expanded="false">
                             <div class="media align-items-center">
                               <span class="avatar avatar-sm rounded-circle">
-                                <img alt="Image placeholder" src="../assets/img/theme/team-4.jpg">
+                                <img alt="Image placeholder" src="{{ Storage::disk('public')->url("uploads/".Auth::user()->account->id.".png") }}">
                               </span>
                                 <div class="media-body  ml-2  d-none d-lg-block">
                                     <span class="mb-0 text-sm  font-weight-bold">{{ Auth::user()->name }}</span>
@@ -288,7 +288,7 @@
                             <div class="dropdown-header noti-title">
                                 <h6 class="text-overflow m-0">Welcome!</h6>
                             </div>
-                            <a href="#!" class="dropdown-item">
+                            <a href="{{ route('profile') }}" class="dropdown-item">
                                 <i class="ni ni-single-02"></i>
                                 <span>My profile</span>
                             </a>
@@ -305,10 +305,10 @@
                                 <span>Support</span>
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a href="{{ route('logout') }}" class="dropdown-item">
-                                <i class="ni ni-user-run"></i>
-                                <span>Logout</span>
-                            </a>
+                            <form id="logout-form" action="{{ url('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item">Logout</button>
+                            </form>
                         </div>
                     </li>
                 </ul>
@@ -326,8 +326,8 @@
             <div class="row align-items-center justify-content-lg-between">
                 <div class="col-lg-6">
                     <div class="copyright text-center  text-lg-left  text-muted">
-                        &copy; 2020 <a href="https://www.creative-tim.com" class="font-weight-bold ml-1"
-                                       target="_blank">Creative Tim</a>
+                        &copy; 2020 <a href="https://diamondservices.expert" class="font-weight-bold ml-1"
+                                       target="_blank">Diamond services</a>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -359,10 +359,13 @@
 <script src="{{ asset('assets/vendor/js-cookie/js.cookie.js') }}"></script>
 <script src="{{ asset('assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js') }}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Optional JS -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTTfWur0PDbZWPr7Pmq8K3jiDp0_xUziI"></script>
 <!-- Argon JS -->
 <script src="{{ asset('assets/js/argon.js?v=1.2.0') }}"></script>
+@yield('javascript')
+
 </body>
 
 </html>

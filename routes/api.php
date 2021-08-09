@@ -2,21 +2,21 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MediasController;
-use App\Http\Controllers\AccountsController;
-use App\Http\Controllers\AccessKeysController;
-use App\Http\Controllers\ChannelsController;
-use App\Http\Controllers\FieldsController;
-use App\Http\Controllers\AuthorizationsController;
-use App\Http\Controllers\RespondersController;
-use App\Http\Controllers\ContactsController;
-use App\Http\Controllers\ProfilesController;
-use App\Http\Controllers\SegmentsController;
-use App\Http\Controllers\RequestsController;
-use App\Http\Controllers\MessagesController;
-use App\Http\Controllers\LogsController;
-use App\Http\Controllers\FormsController;
-use App\Http\Controllers\QuestionsController;
+use App\Http\Controllers\Api\MediasController;
+use App\Http\Controllers\Api\AccountsController;
+use App\Http\Controllers\Api\AccessKeysController;
+use App\Http\Controllers\Api\ChannelsController;
+use App\Http\Controllers\Api\FieldsController;
+use App\Http\Controllers\Api\AuthorizationsController;
+use App\Http\Controllers\Api\RespondersController;
+use App\Http\Controllers\Api\ContactsController;
+use App\Http\Controllers\Api\ProfilesController;
+use App\Http\Controllers\Api\SegmentsController;
+use App\Http\Controllers\Api\RequestsController;
+use App\Http\Controllers\Api\MessagesController;
+use App\Http\Controllers\Api\LogsController;
+use App\Http\Controllers\Api\FormsController;
+use App\Http\Controllers\Api\QuestionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,16 +32,17 @@ use App\Http\Controllers\QuestionsController;
 /*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });*/
+
 Route::middleware(['EnsureTokenIsValid'])->group(function (){
     Route::post('contact/segment/add', [ContactsController::class, 'addToSegment'])->name('contacts.addToSegment');
     Route::get('scopes', [AccessKeysController::class, 'scopes'])->name('accessKeys.scopes');
     Route::delete('contact/segment/delete', [ContactsController::class, 'deleteFromSegment'])->name('contacts.deleteFromSegment');
     Route::prefix('medias')->group(function () {
-        Route::get('', [MediasController::class, 'index'])->name('media.index');
-        Route::get('{media}', [MediasController::class, 'show'])->name('media.show');
-        Route::post('add', [MediasController::class, 'store'])->name('media.store');
-        Route::delete('{media}/delete', [MediasController::class, 'delete'])->name('media.delete');
-        Route::put('{media}/update', [MediasController::class, 'update'])->name('media.update');
+        Route::get('', [MediasController::class, 'index'])->name('medias.index');
+        Route::get('{media}', [MediasController::class, 'show'])->name('medias.show');
+        Route::post('add', [MediasController::class, 'store'])->name('medias.store');
+        Route::delete('{media}/delete', [MediasController::class, 'delete'])->name('medias.delete');
+        Route::put('{media}/update', [MediasController::class, 'update'])->name('medias.update');
     });
     Route::prefix('accounts')->group(function () {
         Route::get('', [AccountsController::class, 'index'])->name('accounts.index');
@@ -51,11 +52,11 @@ Route::middleware(['EnsureTokenIsValid'])->group(function (){
         Route::put('{account}/update', [AccountsController::class, 'update'])->name('accounts.update');
     });
     Route::prefix('accessKeys')->group(function () {
-        Route::get('', [AccessKeysController::class, 'index'])->name('accounts.index');
-        Route::get('{accessKey}', [AccessKeysController::class, 'show'])->name('accounts.show');
-        Route::post('add', [AccessKeysController::class, 'create'])->name('accounts.store');
-        Route::delete('{accessKey}/delete', [AccessKeysController::class, 'delete'])->name('accounts.delete');
-        Route::put('{accessKey}/update', [AccessKeysController::class, 'update'])->name('accounts.update');
+        Route::get('', [AccessKeysController::class, 'index'])->name('accessKeys.index');
+        Route::get('{accessKey}', [AccessKeysController::class, 'show'])->name('accessKeys.show');
+        Route::post('add', [AccessKeysController::class, 'create'])->name('accessKeys.store');
+        Route::delete('{accessKey}/delete', [AccessKeysController::class, 'delete'])->name('accessKeys.delete');
+        Route::put('{accessKey}/update', [AccessKeysController::class, 'update'])->name('accessKeys.update');
     });
     Route::prefix('channels')->group(function () {
         Route::get('', [ChannelsController::class, 'index'])->name('channels.index');

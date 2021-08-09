@@ -55,7 +55,7 @@ class EnsureTokenIsValid
         /**
          * check if the account is the owner of the object
          */
-        if($request->method() != "POST" && $request->route($request->route()->parameterNames()[0]) && $request->route($request->route()->parameterNames()[0])->account_id != $account->id)
+        if($request->method() != "POST" && isset($request->route()->parameterNames()[0]) && $request->route($request->route()->parameterNames()[0]) && $request->route($request->route()->parameterNames()[0])->account_id != $account->id)
         {
             return response()->json([
                 'code' => 'Error',
