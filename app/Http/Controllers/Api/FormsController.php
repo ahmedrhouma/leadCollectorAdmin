@@ -66,7 +66,7 @@ class FormsController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), ['account_id' => 'required|exists:accounts,id', 'content' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['content' => 'required','responder_id' => 'exists:responders:id'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {

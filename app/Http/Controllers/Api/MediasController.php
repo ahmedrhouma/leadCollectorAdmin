@@ -19,8 +19,10 @@ class MediasController extends Controller
     {
         $medias = Medias::all();
         $count = $medias->count();
-        foreach ($medias as &$media){
-            $media['url'] = route($media['tag'].'.oauth', ['account' => session('account_id')]);
+        if (session()->has('account_id')) {
+            foreach ($medias as &$media) {
+                $media['url'] = $media['tag']=="liveChat"?"Manually creation requested !":route($media['tag'] . '.oauth', ['account' => session('account_id')]);
+            }
         }
         $filters = [];
         if ($request->has('status')) {
@@ -47,7 +49,7 @@ class MediasController extends Controller
             $medias->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return Helper::dataResponse($medias->toArray(),$count,$filters);
+        return Helper::dataResponse($medias->toArray(), $count, $filters);
     }
 
     /**
@@ -65,8 +67,8 @@ class MediasController extends Controller
             return Helper::errorResponse($validator->errors()->all());
         }
         $media = Medias::create($request->all());
-        if ($media){
-            return Helper::createdResponse("Media",$media);
+        if ($media) {
+            return Helper::createdResponse("Media", $media);
         }
         return Helper::createErrorResponse("Media");
     }
@@ -79,7 +81,7 @@ class MediasController extends Controller
     public function show(Medias $media)
     {
         return response()->json([
-            'code' => "Failed",
+            'code' => "Success",
             'data' => $media
         ]);
     }
@@ -93,13 +95,13 @@ class MediasController extends Controller
      */
     public function update(Request $request, Medias $media)
     {
-        $validator = Validator::make($request->all(), ['name' => 'required', 'tag' => 'required', 'url' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), [], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
-        $media->update($validator->validated());
+        $media->update($request->all());
         $result = $media->wasChanged();
-        if ($result){
-            return Helper::updatedResponse('Media',$media);
+        if ($result) {
+            return Helper::updatedResponse('Media', $media);
         }
         return Helper::updatedErrorResponse('Media');
     }
@@ -112,8 +114,7 @@ class MediasController extends Controller
      */
     public function destroy(Medias $media)
     {
-        $media->delete();
-        if (is_null($media)){
+        if ($media->delete()) {
             return Helper::deleteResponse('Media');
         }
         return Helper::deleteErrorResponse('Media');

@@ -2,30 +2,27 @@
 
 namespace Tests\Unit;
 
-use App\Models\Accounts;
-use Illuminate\Support\Facades\Response;
+use App\Models\Medias;
 use Tests\TestCase;
 
-class AccountsApiTest extends TestCase
+class MediaApiTest extends TestCase
 {
     /**
      * Create account test
      *
      * @return void
      */
-    public function test_create_account()
+    public function test_create_media()
     {
         $payload = [
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
-            'email' => $this->faker->email,
+            'name' => $this->faker->name,
+            'tag' =>  $this->faker->name,
+            'url' => $this->faker->url,
             'status' => 0,
-            'company_url' => $this->faker->url,
-            'company_name' => $this->faker->name
         ];
         $this->withHeaders([
             'Authorization' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW5PZlRoaXNBcGkifQ.BeRDf175mx7Cyd-6MgqFjwUHJXbMUMMMnYHxc5w4LrQ',
-        ])->post(route('accounts.store'), $payload)
+        ])->post(route('medias.store'), $payload)
             ->assertStatus(201)
             ->assertJsonStructure(
                 [
@@ -33,16 +30,16 @@ class AccountsApiTest extends TestCase
                     'message',
                     'data' => [
                         'id',
-                        'token',
-                        'scopes',
+                        'name',
+                        'tag',
+                        'url',
                         'status',
                         'created_at',
                         'updated_at',
-                        'account_id'
                     ]
                 ]
             );
-        $this->assertDatabaseHas('accounts', $payload);
+        $this->assertDatabaseHas('medias', $payload);
     }
 
     /**
@@ -50,32 +47,30 @@ class AccountsApiTest extends TestCase
      *
      * @return void
      */
-    public function test_update_account()
+    public function test_update_media()
     {
         $payload = [
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
-            'email' => $this->faker->email,
+            'name' => $this->faker->name,
+            'tag' =>  $this->faker->name,
+            'url' => $this->faker->url,
             'status' => 0,
-            'company_url' => $this->faker->url,
-            'company_name' => $this->faker->name
         ];
-        $account = Accounts::factory()->make($payload);
-        $account->save();
-        $payload['first_name'] = "ahmed";
+        $media = Medias::factory()->make($payload);
+        $media->save();
+        $payload['name'] = "test";
         $this->withHeaders([
             'Authorization' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW5PZlRoaXNBcGkifQ.BeRDf175mx7Cyd-6MgqFjwUHJXbMUMMMnYHxc5w4LrQ',
-        ])->put(route('accounts.update', ['account' => $account->id]), $payload)
+        ])->put(route('medias.update', ['media' => $media->id]), $payload)
             ->assertStatus(200)
             ->assertJson(
                 [
                     'code' => 'Success',
-                    'message' => "Account updated successfully.",
+                    'message' => "Media updated successfully.",
                     'data' =>
                         $payload,
                 ]
             );
-        $this->assertDatabaseHas('accounts', $payload);
+        $this->assertDatabaseHas('medias', $payload);
     }
 
     /**
@@ -83,21 +78,19 @@ class AccountsApiTest extends TestCase
      *
      * @return void
      */
-    public function test_show_account()
+    public function test_show_media()
     {
         $payload = [
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
-            'email' => $this->faker->email,
+            'name' => $this->faker->name,
+            'tag' =>  $this->faker->name,
+            'url' => $this->faker->url,
             'status' => 0,
-            'company_url' => $this->faker->url,
-            'company_name' => $this->faker->name
         ];
-        $account = Accounts::factory()->make($payload);
-        $account->save();
+        $media = Medias::factory()->make($payload);
+        $media->save();
         $this->withHeaders([
             'Authorization' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW5PZlRoaXNBcGkifQ.BeRDf175mx7Cyd-6MgqFjwUHJXbMUMMMnYHxc5w4LrQ',
-        ])->get(route('accounts.show', ['account' => $account->id]))
+        ])->get(route('medias.show', ['media' => $media->id]))
             ->assertStatus(200)
             ->assertJson(
                 [
@@ -113,28 +106,26 @@ class AccountsApiTest extends TestCase
      *
      * @return void
      */
-    public function test_delete_account()
+    public function test_delete_media()
     {
         $payload = [
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
-            'email' => $this->faker->email,
+            'name' => $this->faker->name,
+            'tag' =>  $this->faker->name,
+            'url' => $this->faker->url,
             'status' => 0,
-            'company_url' => $this->faker->url,
-            'company_name' => $this->faker->name
         ];
-        $account = Accounts::factory()->make($payload);
-        $account->save();
+        $media = Medias::factory()->make($payload);
+        $media->save();
         $this->withHeaders([
             'Authorization' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW5PZlRoaXNBcGkifQ.BeRDf175mx7Cyd-6MgqFjwUHJXbMUMMMnYHxc5w4LrQ',
-        ])->delete(route('accounts.delete', ['account' => $account->id]))
+        ])->delete(route('medias.delete', ['media' => $media->id]))
             ->assertStatus(200)
             ->assertJson(
                 [
                     'code' => 'Success',
-                    'message' => "Account deleted successfully",
+                    'message' => "Media deleted successfully",
                 ]
             );
-        $this->assertDatabaseMissing('accounts', ['id' =>  $account->id]);
+        $this->assertDatabaseMissing('medias', ['id' =>  $media->id]);
     }
 }

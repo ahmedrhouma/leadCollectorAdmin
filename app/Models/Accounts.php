@@ -27,6 +27,13 @@ class Accounts extends Model
         return $this->hasMany(Channels::class,'account_id');
     }
     /**
+     * Get the user associated with the Account.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class,'account_id');
+    }
+    /**
      * Get the contacts associated with the Account.
      */
     public function contacts()
@@ -40,6 +47,7 @@ class Accounts extends Model
     {
         return $this->hasMany(Responders::class,'account_id');
     }
+
     public function delete()
     {
         $this->keys()->delete();

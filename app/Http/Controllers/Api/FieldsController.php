@@ -18,13 +18,18 @@ class FieldsController extends Controller
      */
     public function index(Request $request)
     {
-        $fields = Fields::all();
+        if (session('account_id')) {
+            $fields = Fields::whereNull('account_id')->orWhere('account_id', '=', session('account_id'))->get();
+        }else{
+            $fields = Fields::all();
+        }
         $count = $fields->count();
         $filters = [];
         if ($request->has('account_id')) {
             $fields->where('account_id', '=', $request->account_id);
             $filters['account_id'] = $request->account_id;
         }
+
         if ($request->has('status')) {
             $fields->where('status', '=', $request->status);
             $filters['status'] = $request->status;
@@ -33,7 +38,7 @@ class FieldsController extends Controller
             $fields->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return Helper::dataResponse($fields,$count,$filters);
+        return Helper::dataResponse($fields->toArray(),$count,$filters);
     }
 
     /**

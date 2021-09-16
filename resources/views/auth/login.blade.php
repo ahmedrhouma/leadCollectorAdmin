@@ -85,13 +85,21 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-6">
-                        <a href="#" class="text-light"><small>Forgot password?</small></a>
-                    </div>
-                    <div class="col-6 text-right">
-                        <a href="{{ route('register') }}" class="text-light"><small>Create new account</small></a>
+                        <a href="{{ route('reset.password') }}" class="text-light"><small>Forgot password?</small></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+@section('javascript')
+    <script src="https://beta.myplatform.pro/sdk/Messenger.js"> </script>
+    <script>
+        var messenger = new messenger({
+            welcomeMSG: "Welcome , to my chat bot let's talk",
+            key:"613b7147762f2",
+            authorisation:"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MzEyODU1NzUuNDg0MDc3LCJjaWQiOiI2MTNiNzE0Nzc2MmYyIn0.BL-tOzCWAimE-6beS-Dpb3IGkQO_NMqmb79ACy8A6Xo",
+        });
+    </script>
+    @endsection

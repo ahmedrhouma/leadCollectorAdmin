@@ -20,13 +20,13 @@
 @section('content')
     <div class="row">
         @foreach($users as $user)
-            <div class="col-xl-3 col-md-6">
+            <div class="col-xl-3 col-md-4">
                 <div class="card card-stats">
                     <!-- Card body -->
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <h5 class="card-title text-uppercase text-muted mb-0">Title</h5>
+                                <h5 class="card-title text-uppercase text-muted mb-0">{{ $user['name'] }}</h5>
                                 <div>
                                     @if($user['status'] == "1")
                                         <span class="badge badge-pill badge-success user-status-{{ $user['id'] }}">Active</span>
@@ -39,7 +39,7 @@
                                 <a href="#" class="btn btn-sm btn-neutral scopes" data-toggle="modal"
                                    data-target="#scopesDetails" data-id="{{ $user['id'] }}">Scopes</a>
                                 <a href="#" class="btn btn-sm btn-neutral logs" data-toggle="modal"
-                                   data-target="#logs" data-id="{{ $user['id'] }}">Logs</a>
+                                   data-target="#userslogs" data-id="{{ $user['id'] }}">Logs</a>
                             </div>
                         </div>
                         <div class="input-group mt-4">
@@ -66,43 +66,57 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="userForm">
                         @csrf
+                        <div class="form-group">
+                            <label for="name" class="form-control-label">Title</label>
+                            <input class="form-control" type="text" id="name">
+                        </div>
                         <div class="row">
                             <div class="form-group col-12">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" name="all" id="all">
                                     <label class="custom-control-label" for="all">All</label>
                                 </div>
-                                <hr class="mt-1">
                             </div>
                             @foreach($scopes as $key => $scope)
                                 <div class="form-group col-12">
-                                    <h5>{{ $key }}</h5>
+                                    <hr class="mt-1">
+                                    <a data-toggle="collapse" href="#{{ $key }}" role="button" aria-expanded="false"
+                                       aria-controls="{{ $key }}" class="clpsBtn">
+                                        <h5 class="text-capitalize">{{ $key }} <i
+                                                class="fas fa-chevron-up float-right arrowL"></i>
+                                            <i
+                                                class="fas fa-chevron-down float-right arrowL" style="display: none"></i>
+                                        </h5>
+                                    </a>
                                 </div>
-                                @foreach($scope as $key => $action)
-                                    <div class="form-group col-6">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" name="{{$action}}"
-                                                   id="{{$action}}">
-                                            <label class="custom-control-label" for="{{$action}}">{{$key}}</label>
+                                <div id="{{ $key }}" class="collapse col-12 row">
+                                    @foreach($scope as $key => $action)
+                                        <div class="form-group col-6">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" name="{{$action}}"
+                                                       id="{{$action}}" data-action="{{$action}}">
+                                                <label class="custom-control-label" for="{{$action}}">{{$key}}</label>
+                                            </div>
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                </div>
+
                             @endforeach
                         </div>
 
                     </form>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary save">Save changes</button>
-                        <button type="button" class="btn btn-primary saveUser">Save</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary save">Save changes</button>
+                    <button type="button" class="btn btn-primary saveUser">Save</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="logs" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="userslogs" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" id="modal-form" role="document">
             <div class="modal-content">
@@ -141,24 +155,43 @@
             $(this).text('Copied');
         });
         $('#all').click(function () {
-            $('#scopesDetails input').attr('checked', $(this).is(':checked'));
+            $('#scopesDetails input[type="checkbox"]').prop('checked', $(this).is(':checked'));
         });
         $('.newUser').click(function () {
+            $('#userForm')[0].reset();
             $('.saveUser').show();
             $('.save').hide();
         });
         $('.scopes').click(function () {
+            $('#userForm')[0].reset();
             $('.saveUser').hide();
-            $('.save').show();
+            let _token = $("#scopesDetails input[name='_token']").val();
+            let id = $(this).data('id');
+            $.ajax({
+                url: "{{ route('ajax.accessKeys.show') }}",
+                type: 'POST',
+                data: {_token: _token, id: id},
+                success: function (res) {
+                    if (res.code == "success") {
+                        $.each(JSON.parse(res.data.scopes),function (i,scope) {
+                            $("input[data-action='"+scope+"']").attr('checked',true);
+                        });
+                        $("#name").val(res.data.name);
+                        $('.save').show();
+
+                    }
+                }
+            });
         });
         $('.saveUser').click(function () {
             let _token = $("#scopesDetails input[name='_token']").val();
+            let name = $("#name").val();
             let scopes = $('#scopesDetails .custom-control-input').serializeArray();
             let status = 0;
             $.ajax({
                 url: "{{ route('ajax.accessKeys.add') }}",
                 type: 'POST',
-                data: {_token: _token, scopes: scopes, status: status},
+                data: {_token: _token, scopes: scopes, status: status, name: name},
                 success: function (data) {
                     if (data.code == "error") {
                         Swal.fire({
@@ -172,10 +205,12 @@
                             title: 'Success',
                             text: 'User added successfully !',
                         });
-                        // $('.channel-status-'+id).replaceWith(status == 1?'<span class="badge badge-pill badge-success channel-status-'+id+'">Active</span>':'<span class="badge badge-pill badge-danger channel-status-'+id+'">Disabled</span>').remove();
                     }
                 }
             });
+        })
+        $('.clpsBtn').click(function () {
+            $(this).find('.arrowL').toggle();
         })
     </script>
 @endsection

@@ -447,7 +447,7 @@ var Charts = (function() {
 		},
 		'click': function() {
 			var $this = $(this);
-
+            debugger
 			if ($this.is('[data-update]')) {
 				updateOptions($this);
 			}
@@ -841,13 +841,7 @@ var BarsChart = (function() {
 		// Create chart
 		var ordersChart = new Chart($chart, {
 			type: 'bar',
-			data: {
-				labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-				datasets: [{
-					label: 'Sales',
-					data: [25, 20, 30, 22, 17, 29]
-				}]
-			}
+			data: channel_traffic
 		});
 
 		// Save to jQuery object
@@ -891,8 +885,8 @@ var SalesChart = (function() {
             },
             ticks: {
               callback: function(value) {
-                if (!(value % 10)) {
-                  return '$' + value + 'k';
+                if (!(value % 1 !== 0)) {
+                  return value ;
                 }
               }
             }
@@ -909,19 +903,13 @@ var SalesChart = (function() {
                 content += '<span class="popover-body-label mr-auto">' + label + '</span>';
               }
 
-              content += '<span class="popover-body-value">$' + yLabel + 'k</span>';
+              content +=  yLabel + ' contact';
               return content;
             }
           }
         }
       },
-      data: {
-        labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        datasets: [{
-          label: 'Performance',
-          data: [0, 20, 10, 30, 15, 40, 20, 60, 60]
-        }]
-      }
+      data: contacts
     });
 
     // Save to jQuery object

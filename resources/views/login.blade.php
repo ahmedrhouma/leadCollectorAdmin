@@ -9,5 +9,6 @@
 </head>
 <body>
 <a href="{{ $url }}">login with facebook</a>
+
 </body>
 </html>

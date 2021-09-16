@@ -49,7 +49,7 @@ class RespondersController extends Controller
             $responders->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return Helper::dataResponse($responders,$count,$filters);
+        return Helper::dataResponse($responders->toArray(),$count,$filters);
     }
 
     /**
@@ -60,13 +60,13 @@ class RespondersController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), ['account_id' => 'required|exists:accounts,id','name' => 'required','content' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['name' => 'required' ], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
             return Helper::errorResponse($validator->errors()->all());
         }
-        $responder = Responders::create($request->all());
+        $responder = Responders::create(array_merge(['account_id'=>session('account_id')],$request->all() ));
         $responder->refresh();
         if ($responder){
             Helper::addLog("Add",10,$responder->id);

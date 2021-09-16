@@ -99,11 +99,12 @@ class AccessKeysController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request,$accessKey)
+    public function update(Request $request, Access_keys $accessKey)
     {
-        $validator = Validator::make($request->all(), ['name' => 'required', 'tag' => 'required', 'url' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['scopes' => 'required', 'status' => 'required'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
+
         if ($validator->fails()) {
             return Helper::errorResponse($validator->errors()->all());
         }
@@ -122,7 +123,7 @@ class AccessKeysController extends Controller
      * @param  Access_keys $accessKey
      * @return \Illuminate\Http\Response
      */
-    public function destroy($accessKey)
+    public function destroy(Access_keys $accessKey)
     {
         $accessKey->delete();
         return Helper::deleteResponse('Access Key');

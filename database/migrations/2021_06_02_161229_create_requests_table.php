@@ -20,7 +20,7 @@ class CreateRequestsTable extends Migration
             $table->tinyInteger('status');
             $table->foreignId('channel_id')->constrained('channels')->onDelete('cascade');
             $table->foreignId('contact_id')->constrained('contacts')->onDelete('cascade');
-            $table->foreignId('message_id')->constrained('messages')->onDelete('cascade');
+            $table->foreignId('message_id')->constrained('messages')->nullable()->onDelete('cascade');
             $table->foreignId('responder_id')->constrained('responders');
             $table->timestamps();
             $table->date('end_at')->nullable();

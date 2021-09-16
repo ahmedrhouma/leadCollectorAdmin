@@ -5,23 +5,83 @@ namespace App\Http\Controllers\Web;
 use App\Classes\Matcher;
 use App\Helper\Helper;
 use App\Models\Access_keys;
+use App\Models\Accounts;
+use App\Models\Authorizations;
 use App\Models\Channels;
 use App\Models\Contacts;
 use App\Models\Medias;
+use App\Models\Requests;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use DateTimeImmutable;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Key\InMemory;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        return view('dashboard.index');
+        $requests = auth()->user()->account->contacts()->withCount('requests')->get()->sum('requests_count');
+        $contacts_month = Contacts::select(
+            DB::raw("(count(*)) as total"),
+            DB::raw("(DATE_FORMAT(created_at,'%m-%Y')) as my_date")
+        )->where('account_id', auth()->user()->account->id)
+            ->groupBy(DB::raw("DATE_FORMAT(created_at,'%m-%Y')"))
+            ->get();
+        $contacts_day = Contacts::select(
+            DB::raw("(count(*)) as total"),
+            DB::raw("(DATE_FORMAT(created_at,'%d-%m-%Y')) as my_date")
+        )->where('account_id', auth()->user()->account->id)
+            ->groupBy(DB::raw("DATE_FORMAT(created_at,'%d-%m-%Y')"))
+            ->get();
+        $channels_traffic = auth()->user()->account->channels()->withCount('requests')->get();
+        /*dd(Medias::whereHas('channels', function($q)
+        {
+            $q->where('account_id','=', auth()->user()->account->id);
+
+        })->with('channels','channels.requests')->withCount('requests')->get());
+        $medias_traffic = Requests::select(
+            DB::raw("(count(*)) as total"),
+            DB::raw("(DATE_FORMAT(created_at,'%d-%m-%Y')) as my_date")
+        )->where('account_id', auth()->user()->account->id)
+            ->groupBy(DB::raw("DATE_FORMAT(created_at,'%d-%m-%Y')"))
+            ->get();
+        $medias_traffic = auth()->user()->account->channels()->with('media')->get()->groupBy('media_id');
+        dd($medias_traffic);*/
+        $data_day = [
+            'labels' => $contacts_day->pluck('my_date'),
+            'datasets' => [
+                [
+                    'label' => 'contacts',
+                    'data' => $contacts_day->pluck('total')
+                ]]
+        ];
+        $data_month = [
+            'labels' => $contacts_month->pluck('my_date')->toarray(),
+            'datasets' => [
+                [
+                    'label' => 'contacts',
+                    'data' => $contacts_month->pluck('total')->toarray()
+                ]]
+        ];
+        $data_traffic_channels = [
+            'labels' => $channels_traffic->pluck('name')->toarray(),
+            'datasets' => [
+                [
+                    'label' => 'requests',
+                    'data' => $channels_traffic->pluck('requests_count')->toarray()
+                ]]
+        ];
+
+        return view('dashboard.index', ['requests' => $requests, 'contacts_stat_month' => $data_month, 'contacts_stat_day' => $data_day, 'data_traffic_channels' => $data_traffic_channels]);
     }
 
     public function channels()
     {
-        $channels = auth()->user()->account()->first()->channels()->with('media')->get();
+        $channels = auth()->user()->account()->first()->channels()->with(['media', 'authorization', 'responder'])->get();
         $medias = Medias::all();
         foreach ($medias as $media) {
             $class = "App\Services\\" . ucfirst($media['tag']) . "Service";
@@ -33,9 +93,43 @@ class DashboardController extends Controller
         return view('dashboard.channels', ['channels' => $channels, 'medias' => $medias, 'responders' => auth()->user()->account->responders]);
     }
 
+    public function store(Request $request)
+    {
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->storeAs('uploads', auth()->user()->account->id . '.png', 'public');
+            return response()->json([
+                'code' => "success",
+                'path' => $path
+            ]);
+        }
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
+            'subject' => 'required',
+            'message' => 'required'
+        ]);
+        Contact::create($request->all());
+
+        return back()->with('success', 'We have received your message and would like to thank you for writing to us.');
+    }
+
     public function profile()
     {
         return view('dashboard.profile', ['profile' => auth()->user()->account]);
+    }
+
+    public function pricing()
+    {
+        return view('dashboard.pricing');
+    }
+    public function activity()
+    {
+        return view('dashboard.activity');
+    }
+    public function configuration()
+    {
+        return view('dashboard.configuration');
     }
 
     public function users()
@@ -98,7 +192,8 @@ class DashboardController extends Controller
     {
         $scopes = array_column($request->scopes, 'name');
         $status = $request->status;
-        $accessKey = Access_keys::create(["token"=>Helper::generateToken(auth()->user()->account),"status"=>$status,"account_id"=>auth()->user()->account->id,"scopes"=>json_encode($scopes) ]);
+        $name = $request->name;
+        $accessKey = Access_keys::create(["token" => Helper::generateToken(auth()->user()->account), "status" => $status, "name" => $name, "account_id" => auth()->user()->account->id, "scopes" => json_encode($scopes)]);
         if ($accessKey) {
             return response()->json([
                 'code' => "success",
@@ -110,10 +205,26 @@ class DashboardController extends Controller
             'message' => "Internal error !! please try later."
         ]);
     }
+
+    public function showAccessKey(Request $request)
+    {
+        $accessKey = Access_keys::find($request->id);
+        if ($accessKey && $accessKey->account_id == auth()->user()->account->id) {
+            return response()->json([
+                'code' => "success",
+                'data' => $accessKey
+            ]);
+        }
+        return response()->json([
+            'code' => "error",
+            'message' => "Internal error !! please try later."
+        ]);
+    }
+
     public function updateProfilePic(Request $request)
     {
         if ($request->hasFile('file')) {
-            $path = $request->file('file')->storeAs('uploads', auth()->user()->account->id.'.png', 'public');
+            $path = $request->file('file')->storeAs('uploads', auth()->user()->account->id . '.png', 'public');
             return response()->json([
                 'code' => "success",
                 'path' => $path
@@ -124,11 +235,12 @@ class DashboardController extends Controller
             'message' => "Internal error !! please try later."
         ]);
     }
+
     public function updateProfile(Request $request)
     {
         $account = auth()->user()->account;
         $account->update($request->all());
-        if ($account->wasChanged()){
+        if ($account->wasChanged()) {
             return response()->json([
                 'code' => "success",
             ]);
@@ -137,5 +249,60 @@ class DashboardController extends Controller
             'code' => "error",
             'message' => "Internal error !! please try later."
         ]);
+    }
+
+    public function addLiveChat(Request $request)
+    {
+        $account = auth()->user()->account;
+        $media = Medias::where('tag', 'liveChat')->first();
+        $configuration = Configuration::forSymmetricSigner(
+            new Sha256(),
+            InMemory::base64Encoded('mBC5v1sOKVvbdEitdSBenu59nfNfhwkedkJVNabosTw=')
+        );
+        $now = new DateTimeImmutable();
+        $channelId = uniqid();
+        $token = $configuration->builder()
+            ->issuedAt($now)
+            ->withClaim('cid', $channelId)
+            ->getToken($configuration->signer(), $configuration->signingKey());
+        $authorization = Authorizations::create(['token' => $token->toString(), 'status' => 1, 'account_id' => $account->id, 'media_id' => $media->id]);
+        $path = "";
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->storeAs('channels', $channelId . '.png', 'public');
+        }
+        $channel = Channels::Create(['identifier' => $channelId, 'account_id' => $account->id, 'media_id' => $media->id, 'responder_id' => $request->responder_id, 'name' => $request->name, 'picture' => Storage::disk('public')->url($path), 'status' => $request->status, 'authorization_id' => $authorization->id]);
+        if ($channel) {
+            return response()->json([
+                'code' => "success",
+            ]);
+        }
+        return response()->json([
+            'code' => "error",
+            'message' => "Internal error !! please try later."
+        ]);
+    }
+
+    public function showLiveChat(Request $request, Channels $channel)
+    {
+        $account = auth()->user()->account;
+        $media = Medias::where('tag', 'liveChat')->first();
+        if ($channel && $channel->account_id == $account->id && $channel->media_id == $media->id) {
+            return response()->json([
+                'code' => "success",
+                'data' => $channel
+            ]);
+        }
+    }
+
+    public function connect(Request $request, $accountId)
+    {
+        $account = Accounts::find($accountId);
+        if (!$account) {
+            return view('dashboard.error');
+        }
+        if (!is_null($account->user)) {
+            return redirect('dashboard');
+        }
+        return view('auth.register', ['account' => $account]);
     }
 }

@@ -11,11 +11,16 @@ use Illuminate\Database\Eloquent\Collection;
 
 class Matcher
 {
-    private $matchedContacts;
+    private $matchedContacts = [];
 
-    public function matchData()
+    public function matchData(Contacts $contact)
     {
-
+        $parameters = MatchingConfig::all();
+        $this->matchContact($contact,Contacts::where('account_id',$contact->account_id)->where('id','!=',$contact->id)->get(),$parameters);
+        if (count($this->matchedContacts) == 1){
+            Profiles::where('contact_id',$contact->id)->update(['contact_id'=>$this->matchedContacts[0]->id]);
+            $contact->delete();
+        }
     }
 
     /**
@@ -36,9 +41,10 @@ class Matcher
 
                 /** Convert distance to percentage */
                 $per = (1 - ($lev / max(strlen($contactToMatch[$param->fields['tag']]), $contact[$param->fields['tag']]))) * 100;
+                echo("<pre>".$contactToMatch[$param->fields['tag']]." | ".$contact[$param->fields['tag']]." : ".$per." for  ".$param['percentage']."</pre>");
 
                 /** Check if parameter percentage condition is true */
-                if ($param['percentage'] < $per) {
+                if ($param['percentage'] <= $per) {
                     /** If true increase matched parameters */
                     if ($param['obligation'] == 1) {
                         $this->matchedContacts[] = $contact;

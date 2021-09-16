@@ -27,6 +27,13 @@ class Contacts extends Model
         return $this->hasMany(FieldsValues::class,'contact_id');
     }
     /**
+     * Get the requests values associated with the Contact.
+     */
+    public function requests()
+    {
+        return $this->hasMany(Requests::class,'contact_id');
+    }
+    /**
      * The segments that belong to the Contact.
      */
     public function Segments()

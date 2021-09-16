@@ -6,6 +6,7 @@ use App\Models\Access_keys;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
 use App\Models\Accounts;
+use Illuminate\Support\Facades\Mail;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
@@ -48,7 +49,7 @@ class AccountsController extends Controller
             $accounts->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return Helper::dataResponse($accounts,$count,$filters);
+        return Helper::dataResponse($accounts->toArray(),$count,$filters);
     }
 
     /**
@@ -68,6 +69,12 @@ class AccountsController extends Controller
         }
         $account = Accounts::create($request->all());
         $accessKey = Access_keys::create(["token"=>Helper::generateToken($account),"status"=>1,"account_id"=>$account->id,"scopes"=> Helper::getAccountScopes()]);
+        $data = array('name'=>$request->first_name,'link'=>route('openId.connect',['account'=>$account->id]));
+        Mail::send('mail', $data, function($message) use($account) {
+            $message->to($account->email,$account->first_name)->subject
+            ('Welcome to lead collector');
+            $message->from('ahmedweldrhouma@gmail.com','Lead collector');
+        });
         if ($accessKey){
             //Helper::addLog("Add",10,$accessKey->id);
             return Helper::createdResponse("Access Key",$accessKey);
@@ -99,13 +106,13 @@ class AccountsController extends Controller
      */
     public function update(Request $request,Accounts $account)
     {
-        $validator = Validator::make($request->all(), ['first_name' => 'required','last_name' => 'required','email' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), [], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
-        if ($validator->errors()){
+        if ($validator->fails()){
             return Helper::errorResponse($validator->errors()->all());
         }
-        $account->update($validator->validated());
+        $account->update($request->all());
         $result = $account->wasChanged();
         if ($result){
             return Helper::updatedResponse('Account',$account);
@@ -120,11 +127,9 @@ class AccountsController extends Controller
      */
     public function destroy(Accounts $account)
     {
-        $account->delete();
-        if (is_null($account)){
+        if ($account->delete()){
             return Helper::deleteResponse('Account');
         }
         return Helper::deleteErrorResponse('Account');
     }
-
 }

@@ -87,7 +87,7 @@ class Helper
     static function updatedResponse($name, $element)
     {
         return response()->json([
-            'code' => "Error",
+            'code' => "Success",
             'message' => "$name updated successfully.",
             'data' => $element
         ], 200);

@@ -145,7 +145,54 @@
             </div>
         </div>
     </div>
+    <div class="row">
 
+        <div class="col-xl-8 order-xl-1">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Login</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="updateForm">
+                        <input type="hidden" name="_token" value="UyAq03MWol7y3bsg5E19dtzXodIaxklXrOPZC6dS">
+                        <div class="pl-lg-4">
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-email">Current password</label>
+                                        <input type="password" id="input-email" class="form-control" name="currentPass">
+                                    </div>
+                                </div>
+                            </div><div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-first-name">New password</label>
+                                        <input type="password" id="input-first-name" class="form-control" name="newPass">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-last-name">Confirm password</label>
+                                        <input type="password" id="input-last-name" class="form-control" name="confirmNewPass">
+                                    </div>
+                                </div>
+
+                            </div><hr class="my-4"><div class="text-right">
+                                <button type="button" class="btn btn-primary save">Save</button>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('javascript')

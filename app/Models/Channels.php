@@ -39,4 +39,11 @@ class Channels extends Model
     {
         return $this->belongsTo(Responders::class,'responder_id');
     }
+    /**
+     * Get the requests associated with the channel.
+     */
+    public function requests()
+    {
+        return $this->hasMany(Requests::class,'channel_id');
+    }
 }

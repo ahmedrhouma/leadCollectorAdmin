@@ -7,6 +7,7 @@ namespace App\Classes;
 use App\Helper\Countries;
 use App\Models\Messages;
 use App\Models\Requests;
+use Hashids\Hashids;
 use Illuminate\Support\Facades\Validator;
 
 class Channel
@@ -14,11 +15,14 @@ class Channel
     private $questions = [];
     private $error = "";
     private $replies = ["suggestions" => array(), "messages" => array()];
+
     public function __construct($channel)
     {
         $this->channel = $channel;
-        $this->questions = $channel->responder->questions()->orderby('order')->get();
         $this->responder = $channel->responder;
+        if ($this->responder->type == 1) {
+            $this->questions = $this->channel->responder->questions()->orderby('order')->get();
+        }
     }
 
     /**
@@ -27,10 +31,15 @@ class Channel
      */
     public function getNextQuestion($profile)
     {
-        if ($this->responder->type == 1){
-            return $this->getFormMessage($profile);
-        }elseif ($this->responder->type == 2){
+        if ($this->responder->type == 1) {
+            $this->replies['templated'] = false;
             $this->getQuestionMessage($profile);
+            return $this->replies;
+        } elseif ($this->responder->type == 2) {
+            $this->replies['templated'] = true;
+            $hashids = new Hashids("Diamond Secret", 10);
+            $this->questions = [route('forms.responder', ['id' => $hashids->encode([$this->channel->responder->questions->id, $profile->id])])];
+            $this->getFormMessage($profile);
             return $this->replies;
         }
     }
@@ -40,13 +49,14 @@ class Channel
      */
     function getFormMessage($profile)
     {
-        dd($this->questions);
+        $this->replies["messages"] = $this->questions;
     }
 
     /**
      * @param $profile
      */
-    function getQuestionMessage($profile){
+    function getQuestionMessage($profile)
+    {
         $requests = Requests::where(['contact_id' => $profile->contact_id, 'channel_id' => $this->channel->id])->get();
         //$messages = Messages::where(['contact_id' => $contact_id, 'channel_id' => $this->channel->id])->get();
         $unrepliedRequest = $requests->where('status', 0)->first();
@@ -55,37 +65,33 @@ class Channel
         }
         if ($unrepliedRequest) {
             $this->replies["messages"][] = $this->questions[array_search($unrepliedRequest->toArray(), $requests->toArray())]->message;
-            $this->setQuickReplies($this->questions[array_search($unrepliedRequest->toArray(), $requests->toArray())],$profile);
+            $this->setQuickReplies($this->questions[array_search($unrepliedRequest->toArray(), $requests->toArray())], $profile);
         } elseif (isset($this->questions[$requests->count()])) {
             Requests::updateOrCreate(['channel_id' => $this->channel->id, 'contact_id' => $profile->contact_id, 'responder_id' => $this->responder->id, 'source' => $this->responder->type, 'source_id' => $this->questions[$requests->count()]->id, 'status' => $this->questions[$requests->count()]->response == 0 ? 1 : 0]);
             $this->replies["messages"][] = $this->questions[$requests->count()]->message;
-            $this->setQuickReplies($this->questions[$requests->count()],$profile);
+            $this->setQuickReplies($this->questions[$requests->count()], $profile);
             if ($this->questions[$requests->count()]->response == 0) {
                 $this->getNextQuestion($profile);
             }
-        }else{
-            $this->replies["messages"] =["thanks for your time we will contact you ASAP :)"];
-        } 
+        } else {
+            $this->replies["messages"] = ["thanks for your time we will contact you ASAP :)"];
+        }
     }
+
     /**
      * @param $profile
      * @param $message
      * @return bool
      */
-    public function validate($profile, $message)
+    public function validate($profile, $message, $requests)
     {
-        $requests = Requests::where(['contact_id' => $profile->contact_id, 'channel_id' => $this->channel->id])->get();
-        if (count($requests) !== 0) {
+        if ($requests->count() !== 0 && $this->responder->type !=2 ) {
             $field = $this->questions[$requests->count() - 1]->field()->first();
             $validator = Validator::make([$field->tag => $message], [$field->tag => $field->format]);
-            if ($field->tag == "email" && !$this->verifyEmail($message)) {
-                $this->replies["messages"][] = "Email does not exist :( ! please set a valid email.";
-                return false;
-            }
             if ($field->tag == "country") {
-                if (Countries::exist($message)){
+                if (Countries::exist($message)) {
                     $message = Countries::getCountries($message);
-                }else {
+                } else {
                     $this->replies["messages"][] = "Sorry i didin't understand :(";
                     return false;
                 }
@@ -113,7 +119,8 @@ class Channel
      * @param $question
      * @param $profile
      */
-    public function setQuickReplies($question,$profile){
+    public function setQuickReplies($question, $profile)
+    {
         $field = $question->field()->first();
         if ($field) {
             if (array_key_exists($field->tag, $profile->getAttributes()) && !is_null($profile->getAttributes()[$field->tag])) {
@@ -127,6 +134,7 @@ class Channel
             }
         }
     }
+
     public function verifyEmail($email)
     {
         $vmail = new \App\Classes\VerifyEmail();

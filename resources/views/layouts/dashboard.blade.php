@@ -37,26 +37,32 @@
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link @if (\Request::is('dashboard')) active @endif" href="{{ route('dashboard') }}">
-                            <i class="ni ni-tv-2 text-primary"></i>
+                            <i class="ni ni-tv-2"></i>
                             <span class="nav-link-text">Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @if (\Request::is('channels')) active @endif" href="{{ route('channels') }}">
-                            <i class="ni ni-planet text-orange"></i>
+                            <i class="ni ni-planet"></i>
                             <span class="nav-link-text">Channels</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @if (\Request::is('users')) active @endif" href="{{ route('users') }}">
-                            <i class="ni ni-pin-3 text-primary"></i>
+                            <i class="fas fa-users"></i>
                             <span class="nav-link-text">Users</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="ni ni-single-02 text-yellow"></i>
-                            <span class="nav-link-text">Configuration</span>
+                        <a class="nav-link @if (\Request::is('pricing')) active @endif" href="{{ route('pricing') }}">
+                            <i class="fas fa-shopping-bag "></i>
+                            <span class="nav-link-text">Pricings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if (\Request::is('configuration')) active @endif" href="{{ route('configuration') }}">
+                            <i class="fas fa-cog"></i>
+                            <span class="nav-link-text ">Configuration</span>
                         </a>
                     </li>
                 </ul>
@@ -75,12 +81,13 @@
                 <!-- Search form -->
                 <form class="navbar-search navbar-search-light form-inline mr-sm-3" id="navbar-search-main">
                     <div class="form-group mb-0">
-                        <div class="input-group input-group-alternative input-group-merge">
+                        {{--<div class="input-group input-group-alternative input-group-merge">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-search"></i></span>
                             </div>
                             <input class="form-control" placeholder="Search" type="text">
-                        </div>
+                        </div>--}}
+                        <a href="https://documenter.getpostman.com/view/3682999/TzRYeR4t" type="button" class="btn btn-neutral">Documentation</a>
                     </div>
                     <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main"
                             aria-label="Close">
@@ -105,7 +112,7 @@
                             <i class="ni ni-zoom-split-in"></i>
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
+                    {{--<li class="nav-item dropdown">
                         <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
                            aria-expanded="false">
                             <i class="ni ni-bell-55"></i>
@@ -223,53 +230,7 @@
                             <a href="#!" class="dropdown-item text-center text-primary font-weight-bold py-3">View
                                 all</a>
                         </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded="false">
-                            <i class="ni ni-ungroup"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-dark bg-default  dropdown-menu-right ">
-                            <div class="row shortcuts px-4">
-                                <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-red">
-                      <i class="ni ni-calendar-grid-58"></i>
-                    </span>
-                                    <small>Calendar</small>
-                                </a>
-                                <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-orange">
-                      <i class="ni ni-email-83"></i>
-                    </span>
-                                    <small>Email</small>
-                                </a>
-                                <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-info">
-                      <i class="ni ni-credit-card"></i>
-                    </span>
-                                    <small>Payments</small>
-                                </a>
-                                <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-green">
-                      <i class="ni ni-books"></i>
-                    </span>
-                                    <small>Reports</small>
-                                </a>
-                                <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-purple">
-                      <i class="ni ni-pin-3"></i>
-                    </span>
-                                    <small>Maps</small>
-                                </a>
-                                <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-yellow">
-                      <i class="ni ni-basket"></i>
-                    </span>
-                                    <small>Shop</small>
-                                </a>
-                            </div>
-                        </div>
-                    </li>
+                    </li>--}}
                 </ul>
                 <ul class="navbar-nav align-items-center  ml-auto ml-md-0 ">
                     <li class="nav-item dropdown">
@@ -277,7 +238,7 @@
                            aria-expanded="false">
                             <div class="media align-items-center">
                               <span class="avatar avatar-sm rounded-circle">
-                                <img alt="Image placeholder" src="{{ Storage::disk('public')->url("uploads/".Auth::user()->account->id.".png") }}">
+                                <img alt="Image placeholder" src="{{ Storage::disk('public')->exists("uploads/".Auth::user()->account->id.".png")?Storage::disk('public')->url("uploads/".Auth::user()->account->id.".png"):"../assets/img/brand/blue.png" }}">
                               </span>
                                 <div class="media-body  ml-2  d-none d-lg-block">
                                     <span class="mb-0 text-sm  font-weight-bold">{{ Auth::user()->name }}</span>
@@ -292,17 +253,9 @@
                                 <i class="ni ni-single-02"></i>
                                 <span>My profile</span>
                             </a>
-                            <a href="#!" class="dropdown-item">
-                                <i class="ni ni-settings-gear-65"></i>
-                                <span>Settings</span>
-                            </a>
-                            <a href="#!" class="dropdown-item">
+                            <a href="{{ route('activity') }}" class="dropdown-item">
                                 <i class="ni ni-calendar-grid-58"></i>
                                 <span>Activity</span>
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                                <i class="ni ni-support-16"></i>
-                                <span>Support</span>
                             </a>
                             <div class="dropdown-divider"></div>
                             <form id="logout-form" action="{{ url('logout') }}" method="POST">
@@ -320,7 +273,7 @@
         @yield('header')
     </div>
     <!-- Page content -->
-    <div class="container-fluid mt--6">
+    <div class="container-fluid mt--6" style="height: 100%;">
         @yield('content')
         <footer class="footer pt-0">
             <div class="row align-items-center justify-content-lg-between">
@@ -360,11 +313,9 @@
 <script src="{{ asset('assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js') }}"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- Optional JS -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTTfWur0PDbZWPr7Pmq8K3jiDp0_xUziI"></script>
-<!-- Argon JS -->
-<script src="{{ asset('assets/js/argon.js?v=1.2.0') }}"></script>
 @yield('javascript')
+
+<script src="{{ asset('assets/js/argon.js?v=1.2.0') }}"></script>
 
 </body>
 

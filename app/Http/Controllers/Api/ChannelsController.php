@@ -4,11 +4,18 @@ namespace App\Http\Controllers\Api;
 
 use App\Helper\Helper;
 use App\Models\Accounts;
+use App\Models\Authorizations;
 use App\Models\Channels;
 use App\Models\Medias;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Key\InMemory;
+use DateTimeImmutable;
+
 class ChannelsController extends Controller
 {
     /**
@@ -53,24 +60,58 @@ class ChannelsController extends Controller
             $channels->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return Helper::dataResponse($channels,$count,$filters);
+        foreach ($channels as &$channel){
+            if ($channel->media->tag == "liveChat"){
+                $channel->integration = '&lt;script&gt; var messenger = new messenger({
+        welcomeMSG: "Welcome , to my chat bot let\'s talk",
+        key:"'.$channel->identifier.'",
+        authorisation:"'.$channel->authorization->token.'",
+       });  
+</script>';
+            }
+        }
+
+        return Helper::dataResponse($channels->toArray(),$count,$filters);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), ['account_id' => 'required|exists:accounts,id', 'media_id|exists:medias,id' => 'required', 'identifier' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['media_id' => 'required|exists:medias,id'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
             return Helper::errorResponse($validator->errors()->all());
         }
-        $channel = Channels::create($request->all());
+        $media = Medias::find($request->media_id)->where('tag', 'liveChat')->first();
+        if (is_null($media)){
+            return response()->json([
+                'code' => "Failed",
+                'message' => "Media not exist or not of type live chat"
+            ]);
+        }
+        $configuration = Configuration::forSymmetricSigner(
+            new Sha256(),
+            InMemory::base64Encoded('mBC5v1sOKVvbdEitdSBenu59nfNfhwkedkJVNabosTw=')
+        );
+        $now = new DateTimeImmutable();
+        $channelId = uniqid();
+        $token = $configuration->builder()
+            ->issuedAt($now)
+            ->withClaim('cid', $channelId)
+            ->getToken($configuration->signer(), $configuration->signingKey());
+        $authorization = Authorizations::create(['token' => $token->toString(), 'status' => 1, 'account_id' => session('account_id'), 'media_id' => $media->id]);
+        $path = "";
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->storeAs('channels', $channelId . '.png', 'public');
+        }
+        $channel = Channels::Create(['identifier' => $channelId, 'account_id' => session('account_id'), 'media_id' => $media->id, 'responder_id' => $request->responder_id, 'name' => $request->name, 'picture' => Storage::disk('public')->url($path), 'status' => $request->status, 'authorization_id' => $authorization->id]);
         Helper::addLog("Add",3,$channel->id);
         return response()->json([
             'code' => "Success",
@@ -100,12 +141,12 @@ class ChannelsController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, $channel)
+    public function update(Request $request,Channels $channel)
     {
-        $validator = Validator::make($request->all(), ['account_id' => 'required|exists:accounts,id', 'media_id' => 'required', 'identifier' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['account_id' => 'required|exists:accounts,id', 'media_id' => 'exists:medias,id', 'responder_id' => 'exists:responders,id'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
-        $channel->update($validator->validated());
+        $channel->update($request->all());
         $result = $channel->wasChanged();
         Helper::addLog("Update",3,$channel->id);
         return response()->json([

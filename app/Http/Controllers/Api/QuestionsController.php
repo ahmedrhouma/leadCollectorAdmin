@@ -59,7 +59,7 @@ class QuestionsController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), ['responder_id' => 'required|exists:responders,id','message' => 'required','response' => 'required|in:true,false','type' => 'required|in:text,number','order' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['responder_id' => 'required|exists:responders,id','message' => 'required','response' => 'required|in:true,false','order' => 'required'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
