@@ -15,6 +15,7 @@ class CreateAccessKeysTable extends Migration
     {
         Schema::create('access_keys', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->string('token',255);
             $table->mediumText('scopes');
             $table->tinyInteger('status');

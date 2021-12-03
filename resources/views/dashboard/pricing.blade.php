@@ -1,16 +1,6 @@
 @extends('layouts.dashboard')
 @section('css')
     <style>
-
-        #pricing-tables .col-md-3:hover, #pricing-tables .col-sm-6:hover, #pricing-tables .col-xs-12:hover {
-            box-shadow: 0px 11px 30px 0px rgba(0, 0, 0, 0.75);
-            z-index: 2;
-            transform: scale(1.06);
-            border: 0;
-            transition: 0.5s all;
-            border: none;
-        }
-
         .single-table {
             background: #fff;
             transition: all 0.2s linear;
@@ -176,18 +166,14 @@
             border-color: transparent transparent transparent #9b59b6;
         }
     </style>
-    @endsection
+@endsection
 <!-- Header -->
 @section('header')
     <div class="container-fluid">
         <div class="header-body">
             <div class="row align-items-center py-4">
                 <div class="col-lg-6 col-7">
-                    <h6 class="h2 text-white d-inline-block mb-0">Dashboard</h6>
-                </div>
-                <div class="col-lg-6 col-5 text-right">
-                    <a href="#" class="btn btn-sm btn-neutral newUser" data-toggle="modal" data-target="#scopesDetails">New
-                        user</a>
+                    <h6 class="h2 text-white d-inline-block mb-0">Pricing</h6>
                 </div>
             </div>
         </div>

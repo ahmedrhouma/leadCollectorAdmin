@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use PhpParser\Builder;
 
 class Contacts extends Model
 {
@@ -14,11 +16,21 @@ class Contacts extends Model
         'id'
     ];
     public function getGenderAttribute($gender){
-        return self::GENDER[$gender];
+        return self::GENDER[$gender] ?? null;
     }
     public function getUserTypeAttribute($userType){
-        return self::USERTYPE[$userType];
+        return self::USERTYPE[$userType] ?? null;
     }
+
+    public static function booted()
+    {
+        static::addGlobalScope('contacts_created_user',function (\Illuminate\Database\Eloquent\Builder $builder){
+            if (Auth()->check()) {
+                $builder->where('account_id', Auth()->user()->account->id);
+            }
+        });
+    }
+
     /**
      * Get the field values associated with the Contact.
      */

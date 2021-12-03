@@ -1,0 +1,2137 @@
+{
+    "variables": [],
+    "info": {
+        "name": "Laravel API",
+        "_postman_id": "0e6b9217-5ec8-4ce2-8573-4ba283616652",
+        "description": "",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Access Keys management",
+            "description": "\nAPIs for managing access Keys",
+            "item": [
+                {
+                    "name": "Display a list of scopes.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/scopes",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Display a list of access Keys.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/accessKeys",
+                            "query": [
+                                {
+                                    "key": "id",
+                                    "value": "eos",
+                                    "description": "Int The id of access key.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "account_id",
+                                    "value": "9",
+                                    "description": "Int The id of account.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "role",
+                                    "value": "aliquid",
+                                    "description": "String The role of access key.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "sint",
+                                    "description": "Int Status of access key.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "from",
+                                    "value": "6",
+                                    "description": "Date Date of account creation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "to",
+                                    "value": "8",
+                                    "description": "Date Date of account cancellationy.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "orderBy",
+                                    "value": "facilis",
+                                    "description": "String Field name.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "sortBy",
+                                    "value": "et",
+                                    "description": "The supported sort directions are either \u2018asc\u2019 for ascending or \u2018desc\u2019 for descending.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "17",
+                                    "description": "Int The number of items returned in the response.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Add new access key.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/accessKeys\/add",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"et\",\n    \"scopes\": \"molestiae\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove access key.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/accessKeys\/:accessKey\/delete",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "accessKey",
+                                    "key": "accessKey",
+                                    "value": "quasi",
+                                    "description": "Int The id of access key."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update access key.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/accessKeys\/:accessKey\/update",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "accessKey",
+                                    "key": "accessKey",
+                                    "value": "veritatis",
+                                    "description": "Int The id of access key."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Channels management",
+            "description": "\nAPIs for managing Channels",
+            "item": [
+                {
+                    "name": "Display a list of channels.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/channels",
+                            "query": [
+                                {
+                                    "key": "media",
+                                    "value": "13",
+                                    "description": "String The name of channel [social media name, landing page].",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "account_id",
+                                    "value": "3",
+                                    "description": "Int The id of account.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "veritatis",
+                                    "description": "Int Status of channel.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "from",
+                                    "value": "a",
+                                    "description": "Date Date of channel creation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "to",
+                                    "value": "nisi",
+                                    "description": "Date Date of channel cancellation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "orderBy",
+                                    "value": "blanditiis",
+                                    "description": "String Field name.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "sortBy",
+                                    "value": "repellat",
+                                    "description": "The supported sort directions are either \u2018asc\u2019 for ascending or \u2018desc\u2019 for descending.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10",
+                                    "description": "Int The number of items returned in the response.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "View channel details.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/channels\/:channel",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"media_id\": \"ut\",\n    \"name\": \"laboriosam\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Add new channel.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/channels\/add",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"media_id\": \"quas\",\n    \"name\": \"dolore\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove the specified resource from storage.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/channels\/:channel\/delete",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "channel",
+                                    "key": "channel",
+                                    "value": "eius",
+                                    "description": "Int The id of channel."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update Channel.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/channels\/:channel\/update",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "channel",
+                                    "key": "channel",
+                                    "value": "mollitia",
+                                    "description": "Int required  The id of channel."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"status\": \"sint\",\n    \"name\": \"ut\",\n    \"date_end\": \"et\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Contacts management",
+            "description": "\nAPIs for managing Contacts",
+            "item": [
+                {
+                    "name": "add contact to segment.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/contact\/segment\/add",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"contact\": \"nihil\",\n    \"segment\": \"consequuntur\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "delete contact from segment.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/contact\/segment\/delete",
+                            "query": []
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"contact\": \"beatae\",\n    \"segment\": \"fugit\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Display a list of contacts.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/contacts",
+                            "query": [
+                                {
+                                    "key": "gender",
+                                    "value": "eveniet",
+                                    "description": "String The gender of contact. Example : male\/female",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "country",
+                                    "value": "18",
+                                    "description": "String The ISO country code.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "cumque",
+                                    "description": "Int Status of contact.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "from",
+                                    "value": "necessitatibus",
+                                    "description": "Date Date of contact creation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "to",
+                                    "value": "architecto",
+                                    "description": "Date Date of contact cancellation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "orderBy",
+                                    "value": "et",
+                                    "description": "String Field name.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "sortBy",
+                                    "value": "sed",
+                                    "description": "The supported sort directions are either \u2018asc\u2019 for ascending or \u2018desc\u2019 for descending.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "9",
+                                    "description": "Int The number of items returned in the response.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "View contact details.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/contacts\/:contact",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove contact",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/contacts\/:contact\/delete",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "contact",
+                                    "key": "contact",
+                                    "value": "perspiciatis",
+                                    "description": "Int The id of contact."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update contact.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/contacts\/:contact\/update",
+                            "query": []
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"status\": \"est\",\n    \"name\": \"aspernatur\",\n    \"date_end\": \"est\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Fields management",
+            "description": "\nAPIs for managing Fields",
+            "item": [
+                {
+                    "name": "Display a list of fields.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/fields",
+                            "query": [
+                                {
+                                    "key": "status",
+                                    "value": "quia",
+                                    "description": "Int Status of field.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "6",
+                                    "description": "Int The number of items returned in the response.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "View field details.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/fields\/:field",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "field",
+                                    "key": "field",
+                                    "value": "nulla",
+                                    "description": "Int required  The id of field ."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Add new custom field.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/fields\/add",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"ducimus\",\n    \"format\": \"iusto\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove field",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/fields\/:field\/delete",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "field",
+                                    "key": "field",
+                                    "value": "sit",
+                                    "description": "Int The id of field."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update field.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/fields\/:field\/update",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "field",
+                                    "key": "field",
+                                    "value": "provident",
+                                    "description": "Int required  The id of field."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"rerum\",\n    \"format\": \"enim\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Forms management",
+            "description": "\nAPIs for managing Forms",
+            "item": [
+                {
+                    "name": "Display a list of forms.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/forms",
+                            "query": [
+                                {
+                                    "key": "status",
+                                    "value": "necessitatibus",
+                                    "description": "Int Status of field.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "16",
+                                    "description": "Int The number of items returned in the response.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "View form details.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/forms\/:form",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "form",
+                                    "key": "form",
+                                    "value": "similique",
+                                    "description": "Int required  The id of form ."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Add new form.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/forms\/add",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"content\": \"ullam\",\n    \"name\": \"ea\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove form.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/forms\/:form\/delete",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "form",
+                                    "key": "form",
+                                    "value": "est",
+                                    "description": "Int The id of form."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update form.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/forms\/:form\/update",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "form",
+                                    "key": "form",
+                                    "value": "a",
+                                    "description": "Int required  The id of form."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"content\": \"modi\",\n    \"name\": \"natus\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Logs management",
+            "description": "\nAPIs for managing Logs",
+            "item": [
+                {
+                    "name": "Display a list of the logs.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/logs",
+                            "query": [
+                                {
+                                    "key": "access_id",
+                                    "value": "est",
+                                    "description": "Int ID of access key.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "action",
+                                    "value": "est",
+                                    "description": "Int The name of the action.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "from",
+                                    "value": "rerum",
+                                    "description": "Date Date of contact creation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "to",
+                                    "value": "blanditiis",
+                                    "description": "Date Date of contact cancellation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "orderBy",
+                                    "value": "deleniti",
+                                    "description": "String Field name.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "sortBy",
+                                    "value": "impedit",
+                                    "description": "The supported sort directions are either \u2018asc\u2019 for ascending or \u2018desc\u2019 for descending.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "15",
+                                    "description": "Int The number of items returned in the response.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Medias management",
+            "description": "\nAPIs for managing Medias",
+            "item": [
+                {
+                    "name": "Display a list of medias.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/medias",
+                            "query": [
+                                {
+                                    "key": "id",
+                                    "value": "est",
+                                    "description": "Int The ID of request.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "contact_id",
+                                    "value": "ducimus",
+                                    "description": "Int The ID of contact.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "channel_id",
+                                    "value": "non",
+                                    "description": "Int The ID of channel.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "responder_id",
+                                    "value": "et",
+                                    "description": "Int The ID of responder.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "eos",
+                                    "description": "Int Status of request.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "from",
+                                    "value": "quas",
+                                    "description": "Date Date of request creation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "to",
+                                    "value": "dicta",
+                                    "description": "Date Date of request cancellation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "orderBy",
+                                    "value": "dolores",
+                                    "description": "String Field name.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "sortBy",
+                                    "value": "soluta",
+                                    "description": "The supported sort directions are either \u2018asc\u2019 for ascending or \u2018desc\u2019 for descending.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "14",
+                                    "description": "Int The number of items returned in the response.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Messages management",
+            "description": "\nAPIs for managing Messages",
+            "item": [
+                {
+                    "name": "Display a list of messages.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/messages",
+                            "query": [
+                                {
+                                    "key": "id",
+                                    "value": "saepe",
+                                    "description": "int The id of message",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "request_id",
+                                    "value": "praesentium",
+                                    "description": "int The ID of request.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "from",
+                                    "value": "commodi",
+                                    "description": "Date Date of message creation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "to",
+                                    "value": "iste",
+                                    "description": "Date Date of message cancellation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "orderBy",
+                                    "value": "a",
+                                    "description": "String Field name.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "sortBy",
+                                    "value": "porro",
+                                    "description": "The supported sort directions are either \u2018asc\u2019 for ascending or \u2018desc\u2019 for descending.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "13",
+                                    "description": "Int The number of items returned in the response.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Profiles management",
+            "description": "\nAPIs for managing Profiles",
+            "item": [
+                {
+                    "name": "Display list of profiles.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/profiles",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Questions management",
+            "description": "\nAPIs for managing Questions",
+            "item": [
+                {
+                    "name": "Display a list of questions.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/questions",
+                            "query": [
+                                {
+                                    "key": "responder_id",
+                                    "value": "saepe",
+                                    "description": "int The id of question.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "field_id",
+                                    "value": "iure",
+                                    "description": "int The id of field.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "expedita",
+                                    "description": "Int Status of question.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "order",
+                                    "value": "quia",
+                                    "description": "Int order of question.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "from",
+                                    "value": "rerum",
+                                    "description": "Date Date of question creation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "to",
+                                    "value": "nostrum",
+                                    "description": "Date Date of question cancellation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "orderBy",
+                                    "value": "quod",
+                                    "description": "String Field name.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "sortBy",
+                                    "value": "enim",
+                                    "description": "The supported sort directions are either \u2018asc\u2019 for ascending or \u2018desc\u2019 for descending.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "19",
+                                    "description": "Int The number of items returned in the response.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "View Question details .",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/questions\/:question",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Add new question.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/questions\/add",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"responder_id\": \"dolorem\",\n    \"field_id\": \"sequi\",\n    \"message\": \"suscipit\",\n    \"response\": \"voluptatibus\",\n    \"order\": 16\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove question.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/questions\/:question\/delete",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "question",
+                                    "key": "question",
+                                    "value": "ex",
+                                    "description": "Int The id of question."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update Question.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/questions\/:question\/update",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "question",
+                                    "key": "question",
+                                    "value": "porro",
+                                    "description": "Int required the question id."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"responder_id\": \"autem\",\n    \"field_id\": \"dolorem\",\n    \"message\": \"in\",\n    \"response\": \"quibusdam\",\n    \"order\": 12\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Requests management",
+            "description": "\nAPIs for managing Requests",
+            "item": [
+                {
+                    "name": "Display a list of requests.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/requests",
+                            "query": [
+                                {
+                                    "key": "contact_id",
+                                    "value": "esse",
+                                    "description": "int The id of contact.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "channel_id",
+                                    "value": "aut",
+                                    "description": "int The id of channel.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "responder_id",
+                                    "value": "facere",
+                                    "description": "int The id of responder",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "ea",
+                                    "description": "Int Status of request.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "from",
+                                    "value": "eius",
+                                    "description": "Date Date of request creation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "to",
+                                    "value": "ipsa",
+                                    "description": "Date Date of request cancellation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "orderBy",
+                                    "value": "quia",
+                                    "description": "String Field name.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "sortBy",
+                                    "value": "et",
+                                    "description": "The supported sort directions are either \u2018asc\u2019 for ascending or \u2018desc\u2019 for descending.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "15",
+                                    "description": "Int The number of items returned in the response.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Responders management",
+            "description": "\nAPIs for managing Responders",
+            "item": [
+                {
+                    "name": "Display a list of responders.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/responders",
+                            "query": [
+                                {
+                                    "key": "status",
+                                    "value": "vitae",
+                                    "description": "Int Status of request.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "from",
+                                    "value": "sunt",
+                                    "description": "Date Date of request creation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "to",
+                                    "value": "voluptatum",
+                                    "description": "Date Date of request cancellation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "orderBy",
+                                    "value": "quia",
+                                    "description": "String Field name.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "sortBy",
+                                    "value": "impedit",
+                                    "description": "The supported sort directions are either \u2018asc\u2019 for ascending or \u2018desc\u2019 for descending.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "18",
+                                    "description": "Int The number of items returned in the response.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "View responder details.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/responders\/:responder",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Add new responder.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/responders\/add",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"voluptatem\",\n    \"type\": \"doloremque\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove responder.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/responders\/:responder\/delete",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "responder",
+                                    "key": "responder",
+                                    "value": "autem",
+                                    "description": "Int The id of responder."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update responder.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/responders\/:responder\/update",
+                            "query": []
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"at\",\n    \"type\": \"reprehenderit\",\n    \"status\": \"nulla\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Segments management",
+            "description": "\nAPIs for managing Segments",
+            "item": [
+                {
+                    "name": "Display a list of segments.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/segments",
+                            "query": [
+                                {
+                                    "key": "name",
+                                    "value": "quia",
+                                    "description": "String required The name of segment.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Add new segment.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/segments\/add",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"et\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove segment.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/segments\/:segment\/delete",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "segment",
+                                    "key": "segment",
+                                    "value": "repellat",
+                                    "description": "Int The id of segment."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update segment.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "127.0.0.1:8000",
+                            "path": "api\/segments\/:segment\/update",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "segment",
+                                    "key": "segment",
+                                    "value": "accusamus",
+                                    "description": "the id of segment"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "{token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"et\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        }
+    ]
+}

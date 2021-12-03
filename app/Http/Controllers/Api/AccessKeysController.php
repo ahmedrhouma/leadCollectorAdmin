@@ -12,21 +12,79 @@ use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use App\Http\Controllers\Controller;
+
+/**
+ * @group  Access Keys management
+ *
+ * APIs for managing access Keys
+ */
 class AccessKeysController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Display a list of access Keys.
+     * @queryParam  id Int The id of access key.
+     * @queryParam  account_id Int The id of account.
+     * @queryParam  role String The role of access key.
+     * @queryParam  status Int Status of access key.
+     * @queryParam  from Date Date of account creation.
+     * @queryParam  to Date Date of account cancellationy.
+     * @queryParam  orderBy String Field name.
+     * @queryParam  sortBy The supported sort directions are either ‘asc’ for ascending or ‘desc’ for descending.
+     * @queryParam  limit Int The number of items returned in the response.
+     *
+     * @response {
+     * "code": "success",
+     * "data": [
+     * {
+     * "id": 1,
+     * "name": "ADMIN",
+     * "token": "token",
+     * "scopes": "[\"contacts.store\",\"contacts.update\"]",
+     * "status": 1,
+     * "end_at": null,
+     * "account_id": 1,
+     * "created_at": "2021-09-10T14:24:20.000000Z",
+     * "updated_at": "2021-09-16T14:08:32.000000Z"
+     * },
+     * {
+     * "id": 2,
+     * "name": "secrétaire",
+     * "token": "token",
+     * "scopes": "[\"contacts.addToSegment\"]",
+     * "status": 1,
+     * "end_at": null,
+     * "account_id": 1,
+     * "created_at": "2021-09-16T12:39:19.000000Z",
+     * "updated_at": "2021-09-16T14:08:40.000000Z"
+     * }
+     * ],
+     * "meta": {
+     * "total": 2,
+     * "links": "",
+     * "filters": []
+     * }
+     * }
+     * @response 404 {
+     *  "code": "error",
+     *  "message": "No access keys yet."
+     * }
+     * @response 500 {
+     *  "code": "error",
+     *  "message": "Unexpected error, please contact technical support."
+     * }
      */
     public function index(Request $request)
     {
         $accessKeys = Access_keys::all();
-        $count= $accessKeys->count();
+        $count = $accessKeys->count();
         $filters = [];
         if ($request->has('id')) {
             $accessKeys = Access_keys::find($request->id);
             $filters['id'] = $request->id;
+        }
+
+        if (session()->has('account_id')) {
+            $accessKeys->where('account_id', session('account_id'));
         }
         if ($request->has('status')) {
             $accessKeys->where('status', '=', $request->status);
@@ -52,15 +110,37 @@ class AccessKeysController extends Controller
             $accessKeys->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return Helper::dataResponse($accessKeys,$count,$filters);
+        return Helper::dataResponse($accessKeys->toArray(), $count, $filters);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Add new access key.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
+     * @bodyParam  name required String The name of access key.
+     * @bodyParam  scopes required JSON The scopes of access key.
+     *
+     * @response {
+     * "code": "success",
+     * "message": "Access key created successfully",
+     * "data": {
+     * "id": 1,
+     * "account_id": 1,
+     * "token": "Klskdfhl357MLKJHLKJsdfg2dfg65s4dgsd4g5",
+     * "role": "user",
+     * "scopes": "",
+     * "status": 1,
+     * "date_start": "2020-05-18",
+     * "date_end": null
+     * }
+     * }
+     * @response 400 {
+     * "code": "error",
+     * "message": "Required fields not filled or formats not recognized !"
+     * }
+     * @response 500 {
+     *  "code": "error",
+     *  "message": "Unexpected error, please contact technical support."
+     * }
      */
     public function store(Request $request)
     {
@@ -71,31 +151,44 @@ class AccessKeysController extends Controller
             return Helper::errorResponse($validator->errors()->all());
         }
         $account = Accounts::find($request->account_id);
-        $accessKey = Access_keys::create(["token"=>Helper::generateToken($account),"status"=>1,"account_id"=>$account->id,"scopes"=>$request->scopes,"role"=>$request->role ]);
-        if ($accessKey){
-            return Helper::createdResponse("Access Key",$accessKey) ;
+        $accessKey = Access_keys::create(["token" => Helper::generateToken($account), "status" => 1, "account_id" => $account->id, "scopes" => $request->scopes, "role" => $request->role]);
+        if ($accessKey) {
+            return Helper::createdResponse("Access Key", $accessKey);
         }
         return Helper::createErrorResponse("Access Key");
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  Access_keys $accessKey
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Access_keys $accessKey)
-    {
-        return response()->json([
-            'code' => 'success',
-            'data' => $accessKey
-        ]);
-    }
+
 
     /**
-     * Update the specified resource in storage.
+     * Update access key.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Access_keys $accessKey
+     * @urlParam  accessKey required Int The id of access key.
+     *
+     * @response {
+     * "code": "success",
+     * "message": "Access key updated successfully",
+     * "data": {
+     * "id": 1,
+     * "account_id": 1,
+     * "token": "Klskdfhl357MLKJHLKJsdfg2dfg65s4dgsd4g5",
+     * "role": "user",
+     * "scopes": "",
+     * "status": 1,
+     * "date_start": "2020-05-18",
+     * "date_end": null
+     * }
+     * }
+     * @response 400 {
+     * "code": "error",
+     * "message": "Unauthorized operation"
+     * }
+     * @response 500 {
+     * "code": "error",
+     * "message": "Unexpected error, the access key has not been updated."
+     * }
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param Access_keys $accessKey
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -110,17 +203,27 @@ class AccessKeysController extends Controller
         }
         $accessKey->update($validator->validated());
         $result = $accessKey->wasChanged();
-        if ($result){
-            Helper::addLog("Update",7,$accessKey->id);
-            return Helper::updatedResponse('Access Key',$accessKey);
+        if ($result) {
+            Helper::addLog("Update", 7, $accessKey->id);
+            return Helper::updatedResponse('Access Key', $accessKey);
         }
         return Helper::updatedErrorResponse('Access Key');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove access key.
      *
-     * @param  Access_keys $accessKey
+     * @urlParam  accessKey required Int The id of access key.
+     *
+     * @response {
+     * "code": "success",
+     * "message": "Access key deleted successfully"
+     * }
+     * @response 500 {
+     * "code": "error",
+     * "message": "Unexpected error, the access key has not been deleted"
+     * }
+     * @param Access_keys $accessKey
      * @return \Illuminate\Http\Response
      */
     public function destroy(Access_keys $accessKey)
@@ -128,25 +231,30 @@ class AccessKeysController extends Controller
         $accessKey->delete();
         return Helper::deleteResponse('Access Key');
     }
+
     /**
-     * Display a listing of the scopes.
-     *
+     * Display a list of scopes.
+     * @response {
+     * "code": "success",
+     * "data": ["scope1.action","scope1.action2","scope2.action"]
+     * }
      * @return \Illuminate\Http\Response
      */
     public function scopes()
     {
         return response()->json([
-            "code"=>"Success",
+            "code" => "Success",
             "data" => Helper::scopes(),
         ], 200);
     }
+
     private function generateToken($account)
     {
         $configuration = Configuration::forSymmetricSigner(
             new Sha256(),
             InMemory::base64Encoded('mBC5v1sOKVvbdEitdSBenu59nfNfhwkedkJVNabosTw=')
         );
-        $now   = new DateTimeImmutable();
+        $now = new DateTimeImmutable();
         $token = $configuration->builder()
             ->issuedAt($now)
             ->withClaim('uid', $account->id)

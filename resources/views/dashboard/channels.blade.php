@@ -420,7 +420,7 @@
                     $.ajax({
                         url: "{{ route('ajax.channels.delete') }}",
                         type: 'POST',
-                        data: {id: $(this).data('id')},
+                        data: {id: $(this).data('id'),_token : '{{ csrf_token() }}'},
                         success: function (data) {
                             if (data.code == "error") {
                                 Swal.fire({

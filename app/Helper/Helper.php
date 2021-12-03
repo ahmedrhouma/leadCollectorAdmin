@@ -28,7 +28,7 @@ class Helper
      * @param array $filters
      * @return \Illuminate\Http\Response
      */
-    static function dataResponse(Array $data, $total, Array $filters)
+    static function dataResponse($data, $total, Array $filters)
     {
         return response()->json([
             'code' => 'success',
@@ -198,7 +198,12 @@ class Helper
             "segments.index",
             "segments.store",
             "segments.update",
+            "segments.delete",
             "segments.show",
+            "questions.index",
+            "questions.store",
+            "questions.update",
+            "questions.delete",
         ]);
     }
 

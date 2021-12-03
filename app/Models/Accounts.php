@@ -12,6 +12,9 @@ class Accounts extends Model
     protected $guarded = [
         'id'
     ];
+    protected $appends = [
+        'requests'
+    ];
     /**
      * Get the accessKeys associated with the Account.
      */
@@ -46,6 +49,13 @@ class Accounts extends Model
     public function responders()
     {
         return $this->hasMany(Responders::class,'account_id');
+    }
+    /**
+     * Get the requests associated with the Account.
+     */
+    public function getRequestsAttribute()
+    {
+        return $this->contacts->loadCount('requests')->sum('requests_count');
     }
 
     public function delete()

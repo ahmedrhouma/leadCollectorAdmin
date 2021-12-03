@@ -3,16 +3,61 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helper\Helper;
+use App\Http\Controllers\Controller;
 use App\Models\Accounts;
 use App\Models\Fields;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\Controller;
 
+/**
+ * @group  Fields management
+ *
+ * APIs for managing Fields
+ */
 class FieldsController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a list of fields.
+     *
+     *
+     * @queryParam  status Int Status of field.
+     * @queryParam  limit Int The number of items returned in the response.
+     *
+     * @response {
+     * "code": "success",
+     * "data": [
+     * {
+     * "id": 1,
+     * "account_id": 1,
+     * "name": "Hobbies",
+     * "tag": "hobby",
+     * "format": "text",
+     * "status": 1
+     * },
+     * {
+     * "id": 2,
+     * "account_id": 1,
+     * "name": "Birthday",
+     * "tag": "birthday",
+     * "format": "date",
+     * "status": 1
+     * }
+     * ],
+     * "meta": {
+     * "total": 10,
+     * "links": "",
+     * "filters": []
+     * }
+     *
+     * }
+     * @response 404 {
+     *  "code": "error",
+     *  "message": "No fields yet."
+     * }
+     * @response 500 {
+     *  "code": "error",
+     *  "message": "Unexpected error, please contact technical support."
+     * }
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
@@ -20,7 +65,7 @@ class FieldsController extends Controller
     {
         if (session('account_id')) {
             $fields = Fields::whereNull('account_id')->orWhere('account_id', '=', session('account_id'))->get();
-        }else{
+        } else {
             $fields = Fields::all();
         }
         $count = $fields->count();
@@ -38,18 +83,41 @@ class FieldsController extends Controller
             $fields->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return Helper::dataResponse($fields->toArray(),$count,$filters);
+        return Helper::dataResponse($fields->toArray(), $count, $filters);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Add new custom field.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @bodyParam  name String required  The type of contact. Example : client / lead / competitor
+     * @bodyParam  format String required The type of field.
+     *
+     * @response {
+     * "code": "success",
+     * "message": "Field created successfully",
+     * "data": {
+     * "id": 1,
+     * "account_id": 1,
+     * "name": "Hobbies",
+     * "tag": "hobby",
+     * "format": "text",
+     * "status": 1
+     * }
+     * }
+     * @response 400 {
+     * "code": "error",
+     * "message": "Required fields not filled or formats not recognized !"
+     * }
+     * @response 500 {
+     *  "code": "error",
+     *  "message": "Unexpected error, please contact technical support."
+     * }
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [/*'account_id' => 'required|exists:accounts,id',*/'name' => 'required','format' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), [/*'account_id' => 'required|exists:accounts,id',*/ 'name' => 'required', 'format' => 'required'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
@@ -60,7 +128,7 @@ class FieldsController extends Controller
         $requestData['tag'] = "tag";
         $field = Fields::create($requestData);
         $field->refresh();
-        Helper::addLog("Add",5,$field->id);
+        Helper::addLog("Add", 5, $field->id);
         return response()->json([
             'code' => "Success",
             'data' => $field
@@ -68,9 +136,30 @@ class FieldsController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * View field details.
      *
-     * @param  Fields $field
+     * @urlParam  field Int required  The id of field .
+     *
+     * @response {
+     * "code": "success",
+     * "data": {
+     * "id": 1,
+     * "account_id": 1,
+     * "name": "Hobbies",
+     * "tag": "hobby",
+     * "format": "text",
+     * "status": 1
+     * }
+     * }
+     * @response 404 {
+     * "code": "error",
+     * "message": "Field not found"
+     * }
+     * @response 500 {
+     *  "code": "error",
+     *  "message": "Unexpected error, please contact technical support."
+     * }
+     * @param Fields $field
      * @return \Illuminate\Http\Response
      */
     public function show($field)
@@ -82,23 +171,47 @@ class FieldsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update field.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Fields $field
+     * @urlParam  field Int required  The id of field.
+     * @bodyParam  name String required  The type of contact. Example : client / lead / competitor
+     * @bodyParam  format String required The type of field.
+     *
+     * @response {
+     * "code": "success",
+     * "message": "Field updated successfully",
+     * "data": {
+     * "id": 1,
+     * "account_id": 1,
+     * "name": "Hobbies",
+     * "tag": "hobby",
+     * "format": "text",
+     * "status": 1
+     * }
+     * }
+     * @response 400 {
+     * "code": "error",
+     * "message": "Unauthorized operation"
+     * }
+     * @response 500 {
+     *  "code": "error",
+     *  "message": "Unexpected error, please contact technical support."
+     * }
+     * @param \Illuminate\Http\Request $request
+     * @param Fields $field
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request,Fields $field)
+    public function update(Request $request, Fields $field)
     {
-        $validator = Validator::make($request->all(), ['account_id' => 'required|exists:accounts,id','name' => 'required','format' => 'required'], $messages = [
+        $validator = Validator::make($request->all(), ['account_id' => 'required|exists:accounts,id', 'name' => 'required', 'format' => 'required'], $messages = [
             'required' => 'The :attribute field is required.',
         ]);
         if ($validator->fails()) {
             return Helper::errorResponse($validator->errors()->all());
         }
         $account = Accounts::find($request->account_id);
-        if ($account == NULL){
+        if ($account == NULL) {
             return response()->json([
                 'code' => "Failed",
                 'message' => "Account not found"
@@ -106,32 +219,42 @@ class FieldsController extends Controller
         }
         $field->update($request->all());
         $result = $field->wasChanged();
-        if ($result){
+        if ($result) {
             return response()->json([
-                "code"=>"Success",
+                "code" => "Success",
                 "message" => "Field updated successfully",
                 "data" => $field,
             ], 200);
         }
         return response()->json([
-            "code"=>"Failed",
-            "message" =>"Failed to update Contact : Nothing to update",
+            "code" => "Failed",
+            "message" => "Failed to update Contact : Nothing to update",
         ], 200);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove field
      *
-     * @param  Fields $field
+     * @urlParam  field required Int The id of field.
+     *
+     * @response {
+     * "code": "success",
+     * "message": "field deleted successfully"
+     * }
+     * @response 500 {
+     *  "code": "error",
+     *  "message": "Unexpected error, please contact technical support."
+     * }
+     * @param Fields $field
      * @return \Illuminate\Http\Response
      */
     public function destroy($field)
     {
         $id = $field->id;
         $field->delete();
-        Helper::addLog("Delete",3,$id);
+        Helper::addLog("Delete", 3, $id);
         return response()->json([
-            "code"=>"Success",
+            "code" => "Success",
             "message" => "Contact deleted successfully",
         ], 200);
     }

@@ -94,12 +94,13 @@
 @endsection
 
 @section('javascript')
-    <script src="https://beta.myplatform.pro/sdk/Messenger.js"> </script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/all.js"></script>
+    <script type="module" src="https://beta.myplatform.pro/sdk/sdk.js"> </script>
     <script>
-        var messenger = new messenger({
+/*        var messenger = new messenger({
             welcomeMSG: "Welcome , to my chat bot let's talk",
             key:"613b7147762f2",
             authorisation:"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MzEyODU1NzUuNDg0MDc3LCJjaWQiOiI2MTNiNzE0Nzc2MmYyIn0.BL-tOzCWAimE-6beS-Dpb3IGkQO_NMqmb79ACy8A6Xo",
-        });
+        });*/
     </script>
-    @endsection
+@endsection

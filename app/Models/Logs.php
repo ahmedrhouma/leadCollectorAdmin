@@ -4,33 +4,49 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Logs extends Model
 {
     use HasFactory;
     const elements = [
         1=>"authorization" ,
-        2=>"accounts" ,
-        3=>"channels" ,
-        4=>"contacts" ,
-        5=>"fields" ,
-         6 => "messages",
-        7=>"profiles",
-        8=>"requests" ,
-        9=>"responders" ,
-        10=>"segments"
+        2=>"account" ,
+        3=>"channel" ,
+        4=>"contact" ,
+        5=>"field" ,
+         6 => "message",
+        7=>"profile",
+        8=>"request" ,
+        9=>"responder" ,
+        10=>"segment"
+    ];
+    const actions = [
+        "Add"=>"created" ,
+        "Edit"=>"updated" ,
+        "Delete"=>"deleted" ,
     ];
     protected $guarded = [
         'id'
     ];
+    protected $appends = [
+        'actionDesc'
+    ];
     public function getElementAttribute($element){
         return self::elements[$element];
+    }
+    public function getActionDescAttribute(){
+        return self::actions[$this->action];
     }
     /**
      * Get the accessKeys associated with the Account.
      */
     public function keys()
     {
-        return $this->hasMany(Access_keys::class,'account_id');
+        return $this->belongsTo(Access_keys::class,'access_id');
+    }
+    public function getCreatedAtAttribute($date)
+    {
+        return Carbon::parse($date)->format('Y-m-d H:i:s');
     }
 }

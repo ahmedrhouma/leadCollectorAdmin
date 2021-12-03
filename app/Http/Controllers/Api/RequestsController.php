@@ -7,11 +7,66 @@ use Illuminate\Http\Request;
 use App\Helper\Helper;
 use App\Http\Controllers\Controller;
 
+/**
+ * @group  Requests management
+ *
+ * APIs for managing Requests
+ */
 class RequestsController extends Controller
 {
 
     /**
-     * Display a listing of the resource.
+     * Display a list of requests.
+     *
+     * @queryParam  contact_id int The id of contact.
+     * @queryParam  channel_id int The id of channel.
+     * @queryParam  responder_id int The id of responder
+     * @queryParam  status Int Status of request.
+     * @queryParam  from Date Date of request creation.
+     * @queryParam  to Date Date of request cancellation.
+     * @queryParam  orderBy String Field name.
+     * @queryParam  sortBy The supported sort directions are either ‘asc’ for ascending or ‘desc’ for descending.
+     * @queryParam  limit Int The number of items returned in the response.
+     *
+     * @response {
+     * "code": "success",
+     * "data": [
+     * {
+     * "id": 1,
+     * "contact_id": 1,
+     * "channel_id": 1,
+     * "responder_id": 1,
+     * "type": "form",
+     * "content": "",
+     * "status": 1,
+     * "date_send": "2021-02-10"
+     * },
+     * {
+     * "id": 2,
+     * "contact_id": 3,
+     * "channel_id": 1,
+     * "responder_id": 4,
+     * "type": "message",
+     * "content": "name",
+     * "status": 1,
+     * "date_send": "2020-11-18"
+     * }
+     * ],
+     * "meta": {
+     * "total": 10,
+     * "links": "",
+     * "filters": []
+     * }
+     * }
+     * @response 404 {
+     *  "code": "error",
+     *  "message": "No requests yet."
+     * }
+     * @response 500 {
+     *  "code": "error",
+     *  "message": "Unexpected error, please contact technical support."
+     * }
+     *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
@@ -60,50 +115,7 @@ class RequestsController extends Controller
             $requests->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return Helper::dataResponse($requests,$count,$filters);
+        return Helper::dataResponse($requests->toArray(), $count, $filters);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }}
+}

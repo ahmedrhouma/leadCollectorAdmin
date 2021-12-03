@@ -52,6 +52,12 @@ class EnsureTokenIsValid
                 'message' => "Invalid account !"
             ]);
         }
+        if ($account->status == 0){
+            return response()->json([
+                'code' => 'Error',
+                'message' => "Account disabled ! for more information contact our technique support."
+            ]);
+        }
         /**
          * check if the account is the owner of the object
          */

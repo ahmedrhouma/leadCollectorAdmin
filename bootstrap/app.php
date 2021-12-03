@@ -40,11 +40,10 @@ $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     App\Exceptions\Handler::class
 );
-
 /*
 |--------------------------------------------------------------------------
 | Return The Application
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------------F--
 |
 | This script returns the application instance. The instance is given to
 | the calling script so we can separate the building of the instances

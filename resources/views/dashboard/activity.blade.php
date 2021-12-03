@@ -138,26 +138,12 @@
                     <div class="card-body">
                         <div id="content">
                             <ul class="timeline">
-                                <li class="event" data-date="09 May 2021 12:30 - 1:00pm">
-                                    <h3>Registration</h3>
-                                    <p>Your account has been created.</p>
+                                @foreach($activities as $activity)
+                                <li class="event" data-date="{{$activity['created_at']}}">
+                                    <h3>{{$activity['action'].' '.$activity['element']}}</h3>
+                                    <p>You have {{$activity['actionDesc']}} a {{$activity['element']}}.</p>
                                 </li>
-                                <li class="event" data-date="09 May 2021 2:30 - 4:00pm">
-                                    <h3>Create channel</h3>
-                                    <p>You have created the channel "best fighties" from the media Facebook.</p>
-                                </li>
-                                <li class="event" data-date="09 May 2021 5:00 - 8:00pm">
-                                    <h3>Create responder</h3>
-                                    <p>You have created the responder "facebook Resonder"</p>
-                                </li>
-                                <li class="event" data-date="09 Jul 2021 8:30 - 9:30pm">
-                                    <h3>Responder assigned to channel</h3>
-                                    <p>You have assigned responder "facebook Resonder" to the channel "best fighties"</p>
-                                </li>
-                                <li class="event" data-date="09 Aug 2021 8:30 - 9:30pm">
-                                    <h3>Channel updated</h3>
-                                    <p>You have activated the channel "best fighties".</p>
-                                </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>

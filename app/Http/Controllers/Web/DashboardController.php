@@ -9,6 +9,7 @@ use App\Models\Accounts;
 use App\Models\Authorizations;
 use App\Models\Channels;
 use App\Models\Contacts;
+use App\Models\Logs;
 use App\Models\Medias;
 use App\Models\Requests;
 use Illuminate\Support\Facades\DB;
@@ -38,19 +39,13 @@ class DashboardController extends Controller
             ->groupBy(DB::raw("DATE_FORMAT(created_at,'%d-%m-%Y')"))
             ->get();
         $channels_traffic = auth()->user()->account->channels()->withCount('requests')->get();
-        /*dd(Medias::whereHas('channels', function($q)
+        $medias_traffic = Medias::with(['channels'=> function($q)
         {
-            $q->where('account_id','=', auth()->user()->account->id);
-
-        })->with('channels','channels.requests')->withCount('requests')->get());
-        $medias_traffic = Requests::select(
-            DB::raw("(count(*)) as total"),
-            DB::raw("(DATE_FORMAT(created_at,'%d-%m-%Y')) as my_date")
-        )->where('account_id', auth()->user()->account->id)
-            ->groupBy(DB::raw("DATE_FORMAT(created_at,'%d-%m-%Y')"))
-            ->get();
-        $medias_traffic = auth()->user()->account->channels()->with('media')->get()->groupBy('media_id');
-        dd($medias_traffic);*/
+            $q->where('account_id','=', auth()->user()->account->id)->withCount('requests');
+        }])->get()->map(function ($media){
+            $media->requests_count = $media->channels->sum('requests_count');
+            return $media;
+        });
         $data_day = [
             'labels' => $contacts_day->pluck('my_date'),
             'datasets' => [
@@ -75,8 +70,15 @@ class DashboardController extends Controller
                     'data' => $channels_traffic->pluck('requests_count')->toarray()
                 ]]
         ];
-
-        return view('dashboard.index', ['requests' => $requests, 'contacts_stat_month' => $data_month, 'contacts_stat_day' => $data_day, 'data_traffic_channels' => $data_traffic_channels]);
+        $data_traffic_channels = [
+            'labels' => $channels_traffic->pluck('name')->toarray(),
+            'datasets' => [
+                [
+                    'label' => 'requests',
+                    'data' => $channels_traffic->pluck('requests_count')->toarray()
+                ]]
+        ];
+        return view('dashboard.index', ['requests' => $requests, 'contacts_stat_month' => $data_month, 'contacts_stat_day' => $data_day, 'data_traffic_channels' => $data_traffic_channels, 'media_traffic' => $medias_traffic]);
     }
 
     public function channels()
@@ -123,10 +125,15 @@ class DashboardController extends Controller
     {
         return view('dashboard.pricing');
     }
+
     public function activity()
     {
-        return view('dashboard.activity');
+        $activities = Logs::whereHas('keys',function ($query){
+            $query->where('account_id',auth()->user()->account->id)->where('name','ADMIN');
+        })->with('keys')->orderBy('created_at','Desc');
+        return view('dashboard.activity',['activities'=>$activities->get()]);
     }
+
     public function configuration()
     {
         return view('dashboard.configuration');
@@ -134,7 +141,7 @@ class DashboardController extends Controller
 
     public function users()
     {
-        $keys = auth()->user()->account()->first()->keys->toArray();
+        $keys = auth()->user()->account->keys->toArray();
         return view('dashboard.users', ['users' => $keys, 'scopes' => Helper::getViewScopes()]);
     }
 
@@ -161,6 +168,24 @@ class DashboardController extends Controller
         return response()->json([
             'code' => "error",
             'message' => "Nothing to update or Internal error !!"
+        ]);
+    }
+
+    public function getLogs(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:access_keys,id',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'code' => "error",
+                'messages' => $validator->errors()->all()
+            ]);
+        }
+        $logs = Logs::where('access_id', $request->id)->orderbyDesc('created_at')->get();
+        return response()->json([
+            'code' => "success",
+            'data' => $logs
         ]);
     }
 
@@ -205,7 +230,33 @@ class DashboardController extends Controller
             'message' => "Internal error !! please try later."
         ]);
     }
-
+    public function editAccessKey(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:access_keys,id',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'code' => "error",
+                'messages' => $validator->errors()->all()
+            ]);
+        }
+        $accessKey = Access_keys::find($request->id);
+        $scopes = array_column($request->scopes, 'name');
+        $status = $request->status;
+        $name = $request->name;
+        $accessKey->update(["status" => $status, "name" => $name, "account_id" => auth()->user()->account->id, "scopes" => json_encode($scopes)]);
+        if ($accessKey) {
+            return response()->json([
+                'code' => "success",
+                'data' => $accessKey
+            ]);
+        }
+        return response()->json([
+            'code' => "error",
+            'message' => "Internal error !! please try later."
+        ]);
+    }
     public function showAccessKey(Request $request)
     {
         $accessKey = Access_keys::find($request->id);

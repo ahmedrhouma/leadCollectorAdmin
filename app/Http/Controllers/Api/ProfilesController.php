@@ -9,11 +9,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Helper\Helper;
 use App\Http\Controllers\Controller;
-
+/**
+ * @group  Profiles management
+ *
+ * APIs for managing Profiles
+ */
 class ProfilesController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display list of profiles.
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
@@ -54,7 +58,7 @@ class ProfilesController extends Controller
             $profiles->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return Helper::dataResponse($profiles,$count,$filters);
+        return Helper::dataResponse($profiles->toArray(),$count,$filters);
     }
 
     /**

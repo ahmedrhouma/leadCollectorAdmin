@@ -1,0 +1,5702 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>API Reference</title>
+
+    <link rel="stylesheet" href="/docs/css/style.css" />
+    <script src="/docs/js/all.js"></script>
+
+
+          <script>
+        $(function() {
+            setupLanguages(["bash","javascript","php","python"]);
+        });
+      </script>
+      </head>
+
+  <body class="">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+        <img src="images/logo.png" />
+                    <div class="lang-selector">
+                                  <a href="#" data-language-name="bash">bash</a>
+                                  <a href="#" data-language-name="javascript">javascript</a>
+                                  <a href="#" data-language-name="php">php</a>
+                                  <a href="#" data-language-name="python">python</a>
+                            </div>
+                            <div class="search">
+              <input type="text" class="search" id="input-search" placeholder="Search">
+            </div>
+            <ul class="search-results"></ul>
+              <div id="toc">
+      </div>
+            </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+          <!-- START_INFO -->
+<h1>Introduction</h1>
+<p>Leads collector is An application that automates the collection, centralization and consolidation of contacts from different channels. Our solution put at your disposal3 sources of prospecting :</p>
+<ul>
+<li>Social media</li>
+<li>Landing pages</li>
+<li>Live chat (Bots)</li>
+</ul>
+<p><a href="http://127.0.0.1:8000/docs/collection.json">Get Postman Collection</a></p>
+<h1>Requests</h1>
+<p>Communicate with the API by making an HTTP request at the correct endpoint. The chosen method determines the action taken.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DELETE</td>
+<td>Use the DELETE method to destroy a resource in your account. If it is not found, the operation will return a 4xx error and an appropriate message.</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>To retrieve information about a resource, use the GET method. The data is returned as a JSON object. GET methods are read-only and do not affect any resources.</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>Issue a POST method to create a new object. Include all needed attributes in the request body encoded as JSON.</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>Use the PUT method to update information about a resource. PUT will set new values on the item without regard to their current values.</td>
+</tr>
+</tbody>
+</table>
+<h1>Error Codes</h1>
+<p>We use standard HTTP response codes to show the success or failure of requests.
+Response codes in the 2xx range indicate success, while codes in the 4xx range indicate an error, such as an authorization failure or a malformed request.
+All 4xx errors will return a JSON response object with an error attribute explaining the error.
+Codes in the 5xx range indicate a server-side problem preventing Vultr from fulfilling your request.</p>
+<table>
+<thead>
+<tr>
+<th>Response</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200 OK</td>
+<td>The response contains your requested information.</td>
+</tr>
+<tr>
+<td>201 Created</td>
+<td>Your request was accepted. The resource was created.</td>
+</tr>
+<tr>
+<td>202 Accepted</td>
+<td>Your request was accepted. The resource was created or updated.</td>
+</tr>
+<tr>
+<td>204 No Content</td>
+<td>Your request succeeded, there is no additional information returned.</td>
+</tr>
+<tr>
+<td>400 Bad Request</td>
+<td>Your request was malformed.</td>
+</tr>
+<tr>
+<td>401 Unauthorized</td>
+<td>You did not supply valid authentication credentials.</td>
+</tr>
+<tr>
+<td>403 Forbidden</td>
+<td>You are not allowed to perform that action.</td>
+</tr>
+<tr>
+<td>404 Not Found</td>
+<td>No results were found for your request.</td>
+</tr>
+<tr>
+<td>429 Too Many Requests</td>
+<td>Your request exceeded the API rate limit.</td>
+</tr>
+<tr>
+<td>500 Internal Server Error</td>
+<td>We were unable to perform the request due to server-side problems.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_INFO -->
+<h1>Access Keys management</h1>
+<p>APIs for managing access Keys</p>
+<!-- START_2b47a68ac15cc12ea0638ce491393dba -->
+<h2>Display a list of scopes.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/scopes" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/scopes"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/scopes',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/scopes'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "data": [
+        "scope1.action",
+        "scope1.action2",
+        "scope2.action"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/scopes</code></p>
+<!-- END_2b47a68ac15cc12ea0638ce491393dba -->
+<!-- START_ea0c64c7e66e2605f75120243421c139 -->
+<h2>Display a list of access Keys.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/accessKeys?id=eos&amp;account_id=9&amp;role=aliquid&amp;status=sint&amp;from=6&amp;to=8&amp;orderBy=facilis&amp;sortBy=et&amp;limit=17" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/accessKeys"
+);
+
+let params = {
+    "id": "eos",
+    "account_id": "9",
+    "role": "aliquid",
+    "status": "sint",
+    "from": "6",
+    "to": "8",
+    "orderBy": "facilis",
+    "sortBy": "et",
+    "limit": "17",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/accessKeys',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'query' =&gt; [
+            'id'=&gt; 'eos',
+            'account_id'=&gt; '9',
+            'role'=&gt; 'aliquid',
+            'status'=&gt; 'sint',
+            'from'=&gt; '6',
+            'to'=&gt; '8',
+            'orderBy'=&gt; 'facilis',
+            'sortBy'=&gt; 'et',
+            'limit'=&gt; '17',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/accessKeys'
+params = {
+  'id': 'eos',
+  'account_id': '9',
+  'role': 'aliquid',
+  'status': 'sint',
+  'from': '6',
+  'to': '8',
+  'orderBy': 'facilis',
+  'sortBy': 'et',
+  'limit': '17',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "data": [
+        {
+            "id": 1,
+            "name": "ADMIN",
+            "token": "token",
+            "scopes": "[\"contacts.store\",\"contacts.update\"]",
+            "status": 1,
+            "end_at": null,
+            "account_id": 1,
+            "created_at": "2021-09-10T14:24:20.000000Z",
+            "updated_at": "2021-09-16T14:08:32.000000Z"
+        },
+        {
+            "id": 2,
+            "name": "secrétaire",
+            "token": "token",
+            "scopes": "[\"contacts.addToSegment\"]",
+            "status": 1,
+            "end_at": null,
+            "account_id": 1,
+            "created_at": "2021-09-16T12:39:19.000000Z",
+            "updated_at": "2021-09-16T14:08:40.000000Z"
+        }
+    ],
+    "meta": {
+        "total": 2,
+        "links": "",
+        "filters": []
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "No access keys yet."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/accessKeys</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>optional</td>
+<td>Int The id of access key.</td>
+</tr>
+<tr>
+<td><code>account_id</code></td>
+<td>optional</td>
+<td>Int The id of account.</td>
+</tr>
+<tr>
+<td><code>role</code></td>
+<td>optional</td>
+<td>String The role of access key.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>optional</td>
+<td>Int Status of access key.</td>
+</tr>
+<tr>
+<td><code>from</code></td>
+<td>optional</td>
+<td>Date Date of account creation.</td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td>optional</td>
+<td>Date Date of account cancellationy.</td>
+</tr>
+<tr>
+<td><code>orderBy</code></td>
+<td>optional</td>
+<td>String Field name.</td>
+</tr>
+<tr>
+<td><code>sortBy</code></td>
+<td>optional</td>
+<td>The supported sort directions are either ‘asc’ for ascending or ‘desc’ for descending.</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>optional</td>
+<td>Int The number of items returned in the response.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_ea0c64c7e66e2605f75120243421c139 -->
+<!-- START_016df260fcdfe9ea6d154b75b3da1a1b -->
+<h2>Add new access key.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://127.0.0.1:8000/api/accessKeys/add" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"name":"et","scopes":"molestiae"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/accessKeys/add"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "name": "et",
+    "scopes": "molestiae"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://127.0.0.1:8000/api/accessKeys/add',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'name' =&gt; 'et',
+            'scopes' =&gt; 'molestiae',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/accessKeys/add'
+payload = {
+    "name": "et",
+    "scopes": "molestiae"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "Access key created successfully",
+    "data": {
+        "id": 1,
+        "account_id": 1,
+        "token": "Klskdfhl357MLKJHLKJsdfg2dfg65s4dgsd4g5",
+        "role": "user",
+        "scopes": "",
+        "status": 1,
+        "date_start": "2020-05-18",
+        "date_end": null
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Required fields not filled or formats not recognized !"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/accessKeys/add</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>required</td>
+<td>optional</td>
+<td>String The name of access key.</td>
+</tr>
+<tr>
+<td><code>scopes</code></td>
+<td>required</td>
+<td>optional</td>
+<td>JSON The scopes of access key.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_016df260fcdfe9ea6d154b75b3da1a1b -->
+<!-- START_8913c7e486a52a0979248ddb2c73dc1c -->
+<h2>Remove access key.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://127.0.0.1:8000/api/accessKeys/quasi/delete" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/accessKeys/quasi/delete"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://127.0.0.1:8000/api/accessKeys/quasi/delete',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/accessKeys/quasi/delete'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "Access key deleted successfully"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, the access key has not been deleted"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/accessKeys/{accessKey}/delete</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>accessKey</code></td>
+<td>required</td>
+<td>Int The id of access key.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_8913c7e486a52a0979248ddb2c73dc1c -->
+<!-- START_fe8d5d26132c6bdffac4e7faefaaee8a -->
+<h2>Update access key.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://127.0.0.1:8000/api/accessKeys/veritatis/update" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/accessKeys/veritatis/update"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://127.0.0.1:8000/api/accessKeys/veritatis/update',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/accessKeys/veritatis/update'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('PUT', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "Access key updated successfully",
+    "data": {
+        "id": 1,
+        "account_id": 1,
+        "token": "Klskdfhl357MLKJHLKJsdfg2dfg65s4dgsd4g5",
+        "role": "user",
+        "scopes": "",
+        "status": 1,
+        "date_start": "2020-05-18",
+        "date_end": null
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unauthorized operation"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, the access key has not been updated."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/accessKeys/{accessKey}/update</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>accessKey</code></td>
+<td>required</td>
+<td>Int The id of access key.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_fe8d5d26132c6bdffac4e7faefaaee8a -->
+<h1>Channels management</h1>
+<p>APIs for managing Channels</p>
+<!-- START_49dde38880772c46db114f63233b9c8d -->
+<h2>Display a list of channels.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/channels?media=13&amp;account_id=3&amp;status=veritatis&amp;from=a&amp;to=nisi&amp;orderBy=blanditiis&amp;sortBy=repellat&amp;limit=10" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/channels"
+);
+
+let params = {
+    "media": "13",
+    "account_id": "3",
+    "status": "veritatis",
+    "from": "a",
+    "to": "nisi",
+    "orderBy": "blanditiis",
+    "sortBy": "repellat",
+    "limit": "10",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/channels',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'query' =&gt; [
+            'media'=&gt; '13',
+            'account_id'=&gt; '3',
+            'status'=&gt; 'veritatis',
+            'from'=&gt; 'a',
+            'to'=&gt; 'nisi',
+            'orderBy'=&gt; 'blanditiis',
+            'sortBy'=&gt; 'repellat',
+            'limit'=&gt; '10',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/channels'
+params = {
+  'media': '13',
+  'account_id': '3',
+  'status': 'veritatis',
+  'from': 'a',
+  'to': 'nisi',
+  'orderBy': 'blanditiis',
+  'sortBy': 'repellat',
+  'limit': '10',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "data": [
+        {
+            "id": 1,
+            "account_id": 1,
+            "media_id": 1,
+            "identifier": "1568941346779",
+            "name": "Facebook page name",
+            "picture": "",
+            "status": 1,
+            "date_start": "2021-02-10",
+            "date_end": null
+        },
+        {
+            "id": 2,
+            "account_id": 1,
+            "media_id": 2,
+            "identifier": "979875434333",
+            "name": "Instagram profile",
+            "picture": "",
+            "status": 1,
+            "date_start": "2021-01-21",
+            "date_end": null
+        }
+    ],
+    "meta": {
+        "total": 10,
+        "links": "",
+        "filters": []
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "No channels yet."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/channels</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>media</code></td>
+<td>optional</td>
+<td>String The name of channel [social media name, landing page].</td>
+</tr>
+<tr>
+<td><code>account_id</code></td>
+<td>optional</td>
+<td>Int The id of account.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>optional</td>
+<td>Int Status of channel.</td>
+</tr>
+<tr>
+<td><code>from</code></td>
+<td>optional</td>
+<td>Date Date of channel creation.</td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td>optional</td>
+<td>Date Date of channel cancellation.</td>
+</tr>
+<tr>
+<td><code>orderBy</code></td>
+<td>optional</td>
+<td>String Field name.</td>
+</tr>
+<tr>
+<td><code>sortBy</code></td>
+<td>optional</td>
+<td>The supported sort directions are either ‘asc’ for ascending or ‘desc’ for descending.</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>optional</td>
+<td>Int The number of items returned in the response.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_49dde38880772c46db114f63233b9c8d -->
+<!-- START_0779c6dd057d85b1ecc8600867607a5a -->
+<h2>View channel details.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/channels/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"media_id":"ut","name":"laboriosam"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/channels/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "media_id": "ut",
+    "name": "laboriosam"
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/channels/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'media_id' =&gt; 'ut',
+            'name' =&gt; 'laboriosam',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/channels/1'
+payload = {
+    "media_id": "ut",
+    "name": "laboriosam"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "data": {
+        "id": 1,
+        "account_id": 1,
+        "media_id": 1,
+        "identifier": "1568941346779",
+        "name": "Facebook page name",
+        "picture": "",
+        "status": 1,
+        "date_start": "2021-02-10",
+        "date_end": null
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Channel not found"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/channels/{channel}</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>media_id</code></td>
+<td>Int</td>
+<td>required</td>
+<td>The id of media.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>String</td>
+<td>required</td>
+<td>The name of channel.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_0779c6dd057d85b1ecc8600867607a5a -->
+<!-- START_e52ac04e10a3f587ddfb0a753f36d83e -->
+<h2>Add new channel.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://127.0.0.1:8000/api/channels/add" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"media_id":"quas","name":"dolore"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/channels/add"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "media_id": "quas",
+    "name": "dolore"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://127.0.0.1:8000/api/channels/add',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'media_id' =&gt; 'quas',
+            'name' =&gt; 'dolore',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/channels/add'
+payload = {
+    "media_id": "quas",
+    "name": "dolore"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "Channel created successfully",
+    "data": {
+        "id": 1,
+        "account_id": 1,
+        "media_id": 1,
+        "identifier": "1568941346779",
+        "name": "Facebook page name",
+        "picture": "",
+        "status": 1,
+        "date_start": "2021-02-10",
+        "date_end": null
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Required fields not filled or formats not recognized !"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/channels/add</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>media_id</code></td>
+<td>Int</td>
+<td>required</td>
+<td>The id of media.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>String</td>
+<td>required</td>
+<td>The name of channel.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_e52ac04e10a3f587ddfb0a753f36d83e -->
+<!-- START_6b20dd2692b2bf8573490d41e6c86324 -->
+<h2>Remove the specified resource from storage.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://127.0.0.1:8000/api/channels/eius/delete" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/channels/eius/delete"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://127.0.0.1:8000/api/channels/eius/delete',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/channels/eius/delete'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "Channel deleted successfully"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/channels/{channel}/delete</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>channel</code></td>
+<td>required</td>
+<td>Int The id of channel.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_6b20dd2692b2bf8573490d41e6c86324 -->
+<!-- START_940cede7ced36ec8aceddf69ed6e82e6 -->
+<h2>Update Channel.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://127.0.0.1:8000/api/channels/mollitia/update" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"status":"sint","name":"ut","date_end":"et"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/channels/mollitia/update"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "status": "sint",
+    "name": "ut",
+    "date_end": "et"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://127.0.0.1:8000/api/channels/mollitia/update',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'status' =&gt; 'sint',
+            'name' =&gt; 'ut',
+            'date_end' =&gt; 'et',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/channels/mollitia/update'
+payload = {
+    "status": "sint",
+    "name": "ut",
+    "date_end": "et"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "Channel updated successfully",
+    "data": {
+        "id": 1,
+        "account_id": 1,
+        "media_id": 1,
+        "identifier": "1568941346779",
+        "name": "Facebook page name",
+        "picture": "",
+        "status": 1,
+        "date_start": "2021-02-10",
+        "date_end": null
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unauthorized operation"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/channels/{channel}/update</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>channel</code></td>
+<td>optional</td>
+<td>Int required  The id of channel.</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td>Int</td>
+<td>required</td>
+<td>The status of channel.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>String</td>
+<td>required</td>
+<td>The name of channel.</td>
+</tr>
+<tr>
+<td><code>date_end</code></td>
+<td>Date</td>
+<td>optional</td>
+<td>The end date of channel.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_940cede7ced36ec8aceddf69ed6e82e6 -->
+<h1>Contacts management</h1>
+<p>APIs for managing Contacts</p>
+<!-- START_d059abd2fd592130bb0db9d9d1a43873 -->
+<h2>add contact to segment.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://127.0.0.1:8000/api/contact/segment/add" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"contact":"nihil","segment":"consequuntur"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/contact/segment/add"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "contact": "nihil",
+    "segment": "consequuntur"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://127.0.0.1:8000/api/contact/segment/add',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'contact' =&gt; 'nihil',
+            'segment' =&gt; 'consequuntur',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/contact/segment/add'
+payload = {
+    "contact": "nihil",
+    "segment": "consequuntur"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "contact added to segment successfully"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/contact/segment/add</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>contact</code></td>
+<td>Int</td>
+<td>required</td>
+<td>The id of contact.</td>
+</tr>
+<tr>
+<td><code>segment</code></td>
+<td>Int</td>
+<td>required</td>
+<td>The id of segment.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_d059abd2fd592130bb0db9d9d1a43873 -->
+<!-- START_8bd3de5bafc12ad4fafd92e4255108fa -->
+<h2>delete contact from segment.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://127.0.0.1:8000/api/contact/segment/delete" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"contact":"beatae","segment":"fugit"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/contact/segment/delete"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "contact": "beatae",
+    "segment": "fugit"
+}
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://127.0.0.1:8000/api/contact/segment/delete',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'contact' =&gt; 'beatae',
+            'segment' =&gt; 'fugit',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/contact/segment/delete'
+payload = {
+    "contact": "beatae",
+    "segment": "fugit"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('DELETE', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "contact deleted from segment successfully"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/contact/segment/delete</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>contact</code></td>
+<td>Int</td>
+<td>required</td>
+<td>The id of contact.</td>
+</tr>
+<tr>
+<td><code>segment</code></td>
+<td>Int</td>
+<td>required</td>
+<td>The id of segment.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_8bd3de5bafc12ad4fafd92e4255108fa -->
+<!-- START_543b0b80e8dc51d2d3ad7e2a327eed26 -->
+<h2>Display a list of contacts.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/contacts?gender=eveniet&amp;country=18&amp;status=cumque&amp;from=necessitatibus&amp;to=architecto&amp;orderBy=et&amp;sortBy=sed&amp;limit=9" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/contacts"
+);
+
+let params = {
+    "gender": "eveniet",
+    "country": "18",
+    "status": "cumque",
+    "from": "necessitatibus",
+    "to": "architecto",
+    "orderBy": "et",
+    "sortBy": "sed",
+    "limit": "9",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/contacts',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'query' =&gt; [
+            'gender'=&gt; 'eveniet',
+            'country'=&gt; '18',
+            'status'=&gt; 'cumque',
+            'from'=&gt; 'necessitatibus',
+            'to'=&gt; 'architecto',
+            'orderBy'=&gt; 'et',
+            'sortBy'=&gt; 'sed',
+            'limit'=&gt; '9',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/contacts'
+params = {
+  'gender': 'eveniet',
+  'country': '18',
+  'status': 'cumque',
+  'from': 'necessitatibus',
+  'to': 'architecto',
+  'orderBy': 'et',
+  'sortBy': 'sed',
+  'limit': '9',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "No contacts yet."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/contacts</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gender</code></td>
+<td>optional</td>
+<td>String The gender of contact. Example : male/female</td>
+</tr>
+<tr>
+<td><code>country</code></td>
+<td>optional</td>
+<td>String The ISO country code.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>optional</td>
+<td>Int Status of contact.</td>
+</tr>
+<tr>
+<td><code>from</code></td>
+<td>optional</td>
+<td>Date Date of contact creation.</td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td>optional</td>
+<td>Date Date of contact cancellation.</td>
+</tr>
+<tr>
+<td><code>orderBy</code></td>
+<td>optional</td>
+<td>String Field name.</td>
+</tr>
+<tr>
+<td><code>sortBy</code></td>
+<td>optional</td>
+<td>The supported sort directions are either ‘asc’ for ascending or ‘desc’ for descending.</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>optional</td>
+<td>Int The number of items returned in the response.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_543b0b80e8dc51d2d3ad7e2a327eed26 -->
+<!-- START_a44483465b9aa8cdb47a73e922b4dd91 -->
+<h2>View contact details.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/contacts/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/contacts/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/contacts/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/contacts/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "No query results for model [App\\Models\\Contacts] 1"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/contacts/{contact}</code></p>
+<!-- END_a44483465b9aa8cdb47a73e922b4dd91 -->
+<!-- START_61bc3dc342ed7a76a3c3e062d8e4f97f -->
+<h2>Remove contact</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://127.0.0.1:8000/api/contacts/perspiciatis/delete" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/contacts/perspiciatis/delete"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://127.0.0.1:8000/api/contacts/perspiciatis/delete',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/contacts/perspiciatis/delete'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "contact deleted successfully"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/contacts/{contact}/delete</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>contact</code></td>
+<td>required</td>
+<td>Int The id of contact.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_61bc3dc342ed7a76a3c3e062d8e4f97f -->
+<!-- START_00f8c883848bafe3a77f13fb1337451c -->
+<h2>Update contact.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://127.0.0.1:8000/api/contacts/1/update" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"status":"est","name":"aspernatur","date_end":"est"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/contacts/1/update"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "status": "est",
+    "name": "aspernatur",
+    "date_end": "est"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://127.0.0.1:8000/api/contacts/1/update',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'status' =&gt; 'est',
+            'name' =&gt; 'aspernatur',
+            'date_end' =&gt; 'est',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/contacts/1/update'
+payload = {
+    "status": "est",
+    "name": "aspernatur",
+    "date_end": "est"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "Channel updated successfully",
+    "data": {
+        "id": 1,
+        "account_id": 1,
+        "media_id": 1,
+        "identifier": "1568941346779",
+        "name": "Facebook page name",
+        "picture": "",
+        "status": 1,
+        "date_start": "2021-02-10",
+        "date_end": null
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unauthorized operation"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/contacts/{contact}/update</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>channel</code></td>
+<td>optional</td>
+<td>Int required  The id of channel.</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td>Int</td>
+<td>required</td>
+<td>The status of channel.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>String</td>
+<td>required</td>
+<td>The name of channel.</td>
+</tr>
+<tr>
+<td><code>date_end</code></td>
+<td>Date</td>
+<td>optional</td>
+<td>The end date of channel.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_00f8c883848bafe3a77f13fb1337451c -->
+<h1>Fields management</h1>
+<p>APIs for managing Fields</p>
+<!-- START_5ad229a3f4ddbaf4f3333b1eb7f7e890 -->
+<h2>Display a list of fields.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/fields?status=quia&amp;limit=6" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/fields"
+);
+
+let params = {
+    "status": "quia",
+    "limit": "6",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/fields',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'query' =&gt; [
+            'status'=&gt; 'quia',
+            'limit'=&gt; '6',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/fields'
+params = {
+  'status': 'quia',
+  'limit': '6',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "data": [
+        {
+            "id": 1,
+            "account_id": 1,
+            "name": "Hobbies",
+            "tag": "hobby",
+            "format": "text",
+            "status": 1
+        },
+        {
+            "id": 2,
+            "account_id": 1,
+            "name": "Birthday",
+            "tag": "birthday",
+            "format": "date",
+            "status": 1
+        }
+    ],
+    "meta": {
+        "total": 10,
+        "links": "",
+        "filters": []
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "No fields yet."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/fields</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td>optional</td>
+<td>Int Status of field.</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>optional</td>
+<td>Int The number of items returned in the response.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_5ad229a3f4ddbaf4f3333b1eb7f7e890 -->
+<!-- START_ae8a8fac20391b973ecfbf8c9c92729b -->
+<h2>View field details.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/fields/nulla" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/fields/nulla"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/fields/nulla',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/fields/nulla'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "data": {
+        "id": 1,
+        "account_id": 1,
+        "name": "Hobbies",
+        "tag": "hobby",
+        "format": "text",
+        "status": 1
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Field not found"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/fields/{field}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>field</code></td>
+<td>optional</td>
+<td>Int required  The id of field .</td>
+</tr>
+</tbody>
+</table>
+<!-- END_ae8a8fac20391b973ecfbf8c9c92729b -->
+<!-- START_e2f625c01208b97c2982caa8531beeb9 -->
+<h2>Add new custom field.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://127.0.0.1:8000/api/fields/add" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"name":"ducimus","format":"iusto"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/fields/add"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "name": "ducimus",
+    "format": "iusto"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://127.0.0.1:8000/api/fields/add',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'name' =&gt; 'ducimus',
+            'format' =&gt; 'iusto',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/fields/add'
+payload = {
+    "name": "ducimus",
+    "format": "iusto"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "Field created successfully",
+    "data": {
+        "id": 1,
+        "account_id": 1,
+        "name": "Hobbies",
+        "tag": "hobby",
+        "format": "text",
+        "status": 1
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Required fields not filled or formats not recognized !"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/fields/add</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>String</td>
+<td>required</td>
+<td>The type of contact. Example : client / lead / competitor</td>
+</tr>
+<tr>
+<td><code>format</code></td>
+<td>String</td>
+<td>required</td>
+<td>The type of field.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_e2f625c01208b97c2982caa8531beeb9 -->
+<!-- START_58c5fee616deb9570bab69daa0aec5e3 -->
+<h2>Remove field</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://127.0.0.1:8000/api/fields/sit/delete" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/fields/sit/delete"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://127.0.0.1:8000/api/fields/sit/delete',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/fields/sit/delete'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "field deleted successfully"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/fields/{field}/delete</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>field</code></td>
+<td>required</td>
+<td>Int The id of field.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_58c5fee616deb9570bab69daa0aec5e3 -->
+<!-- START_dbd9f42ce9af06c1816789ad0d092c73 -->
+<h2>Update field.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://127.0.0.1:8000/api/fields/provident/update" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"name":"rerum","format":"enim"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/fields/provident/update"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "name": "rerum",
+    "format": "enim"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://127.0.0.1:8000/api/fields/provident/update',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'name' =&gt; 'rerum',
+            'format' =&gt; 'enim',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/fields/provident/update'
+payload = {
+    "name": "rerum",
+    "format": "enim"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "Field updated successfully",
+    "data": {
+        "id": 1,
+        "account_id": 1,
+        "name": "Hobbies",
+        "tag": "hobby",
+        "format": "text",
+        "status": 1
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unauthorized operation"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/fields/{field}/update</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>field</code></td>
+<td>optional</td>
+<td>Int required  The id of field.</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>String</td>
+<td>required</td>
+<td>The type of contact. Example : client / lead / competitor</td>
+</tr>
+<tr>
+<td><code>format</code></td>
+<td>String</td>
+<td>required</td>
+<td>The type of field.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_dbd9f42ce9af06c1816789ad0d092c73 -->
+<h1>Forms management</h1>
+<p>APIs for managing Forms</p>
+<!-- START_85be5bd8d022a09f1ca4bec4897d4daf -->
+<h2>Display a list of forms.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/forms?status=necessitatibus&amp;limit=16" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/forms"
+);
+
+let params = {
+    "status": "necessitatibus",
+    "limit": "16",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/forms',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'query' =&gt; [
+            'status'=&gt; 'necessitatibus',
+            'limit'=&gt; '16',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/forms'
+params = {
+  'status': 'necessitatibus',
+  'limit': '16',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "data": [
+        {
+            "id": 1,
+            "account_id": 1,
+            "name": "First collection bot",
+            "content": "",
+            "url": "https:\/\/collector.pro\/forms\/form1\/",
+            "status": 1,
+            "date_start": "2021-02-10",
+            "date_end": null
+        },
+        {
+            "id": 2,
+            "account_id": 1,
+            "name": "Landing page collector",
+            "content": "",
+            "url": "https:\/\/collector.pro\/forms\/form2\/",
+            "status": 1,
+            "date_start": "2021-01-21",
+            "date_end": null
+        }
+    ],
+    "meta": {
+        "total": 10,
+        "links": "",
+        "filters": []
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "No forms yet."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/forms</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td>optional</td>
+<td>Int Status of field.</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>optional</td>
+<td>Int The number of items returned in the response.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_85be5bd8d022a09f1ca4bec4897d4daf -->
+<!-- START_e60b3416bd74d10c3a27d643b781f86f -->
+<h2>View form details.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/forms/similique" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/forms/similique"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/forms/similique',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/forms/similique'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "form not found"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/forms/{form}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>form</code></td>
+<td>optional</td>
+<td>Int required  The id of form .</td>
+</tr>
+</tbody>
+</table>
+<!-- END_e60b3416bd74d10c3a27d643b781f86f -->
+<!-- START_1098d12fc247ca1e947ea1546065f34b -->
+<h2>Add new form.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://127.0.0.1:8000/api/forms/add" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"content":"ullam","name":"ea"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/forms/add"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "content": "ullam",
+    "name": "ea"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://127.0.0.1:8000/api/forms/add',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'content' =&gt; 'ullam',
+            'name' =&gt; 'ea',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/forms/add'
+payload = {
+    "content": "ullam",
+    "name": "ea"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "Form created successfully",
+    "data": {
+        "id": 1,
+        "account_id": 1,
+        "name": "First collection bot",
+        "content": "",
+        "url": "https:\/\/collector.pro\/forms\/form1\/",
+        "status": 1,
+        "date_start": "2021-02-10",
+        "date_end": null
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Required fields not filled or formats not recognized !"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/forms/add</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>content</code></td>
+<td>JSON</td>
+<td>required</td>
+<td>Array of fields id.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>String</td>
+<td>required</td>
+<td>The name of form.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_1098d12fc247ca1e947ea1546065f34b -->
+<!-- START_cca0c9925d2196d9d32a8ee5533bf91f -->
+<h2>Remove form.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://127.0.0.1:8000/api/forms/est/delete" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/forms/est/delete"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://127.0.0.1:8000/api/forms/est/delete',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/forms/est/delete'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "form deleted successfully"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/forms/{form}/delete</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>form</code></td>
+<td>required</td>
+<td>Int The id of form.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_cca0c9925d2196d9d32a8ee5533bf91f -->
+<!-- START_615ee271fbeb47373c0f11307a01e7dc -->
+<h2>Update form.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://127.0.0.1:8000/api/forms/a/update" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"content":"modi","name":"natus"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/forms/a/update"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "content": "modi",
+    "name": "natus"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://127.0.0.1:8000/api/forms/a/update',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'content' =&gt; 'modi',
+            'name' =&gt; 'natus',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/forms/a/update'
+payload = {
+    "content": "modi",
+    "name": "natus"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "Form updated successfully",
+    "data": {
+        "id": 1,
+        "account_id": 1,
+        "name": "First collection bot",
+        "content": "['1','2','3']",
+        "url": "https:\/\/collector.pro\/forms\/form1\/",
+        "status": 1,
+        "date_start": "2021-02-10",
+        "date_end": null
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unauthorized operation"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/forms/{form}/update</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>form</code></td>
+<td>optional</td>
+<td>Int required  The id of form.</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>content</code></td>
+<td>JSON</td>
+<td>required</td>
+<td>Array of fields id.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>String</td>
+<td>required</td>
+<td>The name of form.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_615ee271fbeb47373c0f11307a01e7dc -->
+<h1>Logs management</h1>
+<p>APIs for managing Logs</p>
+<!-- START_54cb226e1c806f816f425980068f574f -->
+<h2>Display a list of the logs.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/logs?access_id=est&amp;action=est&amp;from=rerum&amp;to=blanditiis&amp;orderBy=deleniti&amp;sortBy=impedit&amp;limit=15" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/logs"
+);
+
+let params = {
+    "access_id": "est",
+    "action": "est",
+    "from": "rerum",
+    "to": "blanditiis",
+    "orderBy": "deleniti",
+    "sortBy": "impedit",
+    "limit": "15",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/logs',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'query' =&gt; [
+            'access_id'=&gt; 'est',
+            'action'=&gt; 'est',
+            'from'=&gt; 'rerum',
+            'to'=&gt; 'blanditiis',
+            'orderBy'=&gt; 'deleniti',
+            'sortBy'=&gt; 'impedit',
+            'limit'=&gt; '15',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/logs'
+params = {
+  'access_id': 'est',
+  'action': 'est',
+  'from': 'rerum',
+  'to': 'blanditiis',
+  'orderBy': 'deleniti',
+  'sortBy': 'impedit',
+  'limit': '15',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "data": [
+        {
+            "id": 1,
+            "access_id": "42",
+            "action": "create",
+            "element": "responder",
+            "element_id": 20,
+            "date": "2020-05-18"
+        },
+        {
+            "id": 1,
+            "access_id": "42",
+            "action": "delete",
+            "element": "field",
+            "element_id": 432,
+            "date": "2019-12-10"
+        }
+    ],
+    "meta": {
+        "total": 10,
+        "links": "",
+        "filters": []
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "No logs yet."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/logs</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>access_id</code></td>
+<td>optional</td>
+<td>Int ID of access key.</td>
+</tr>
+<tr>
+<td><code>action</code></td>
+<td>optional</td>
+<td>Int The name of the action.</td>
+</tr>
+<tr>
+<td><code>from</code></td>
+<td>optional</td>
+<td>Date Date of contact creation.</td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td>optional</td>
+<td>Date Date of contact cancellation.</td>
+</tr>
+<tr>
+<td><code>orderBy</code></td>
+<td>optional</td>
+<td>String Field name.</td>
+</tr>
+<tr>
+<td><code>sortBy</code></td>
+<td>optional</td>
+<td>The supported sort directions are either ‘asc’ for ascending or ‘desc’ for descending.</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>optional</td>
+<td>Int The number of items returned in the response.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_54cb226e1c806f816f425980068f574f -->
+<h1>Medias management</h1>
+<p>APIs for managing Medias</p>
+<!-- START_00f5ebe26d85a2ea26759b6dea95b28f -->
+<h2>Display a list of medias.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/medias?id=est&amp;contact_id=ducimus&amp;channel_id=non&amp;responder_id=et&amp;status=eos&amp;from=quas&amp;to=dicta&amp;orderBy=dolores&amp;sortBy=soluta&amp;limit=14" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/medias"
+);
+
+let params = {
+    "id": "est",
+    "contact_id": "ducimus",
+    "channel_id": "non",
+    "responder_id": "et",
+    "status": "eos",
+    "from": "quas",
+    "to": "dicta",
+    "orderBy": "dolores",
+    "sortBy": "soluta",
+    "limit": "14",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/medias',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'query' =&gt; [
+            'id'=&gt; 'est',
+            'contact_id'=&gt; 'ducimus',
+            'channel_id'=&gt; 'non',
+            'responder_id'=&gt; 'et',
+            'status'=&gt; 'eos',
+            'from'=&gt; 'quas',
+            'to'=&gt; 'dicta',
+            'orderBy'=&gt; 'dolores',
+            'sortBy'=&gt; 'soluta',
+            'limit'=&gt; '14',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/medias'
+params = {
+  'id': 'est',
+  'contact_id': 'ducimus',
+  'channel_id': 'non',
+  'responder_id': 'et',
+  'status': 'eos',
+  'from': 'quas',
+  'to': 'dicta',
+  'orderBy': 'dolores',
+  'sortBy': 'soluta',
+  'limit': '14',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "data": [
+        {
+            "id": 1,
+            "contact_id": 1,
+            "channel_id": 1,
+            "responder_id": 1,
+            "type": "form",
+            "content": "",
+            "status": 1,
+            "date_send": "2021-02-10"
+        },
+        {
+            "id": 2,
+            "contact_id": 3,
+            "channel_id": 1,
+            "responder_id": 4,
+            "type": "message",
+            "content": "name",
+            "status": 1,
+            "date_send": "2020-11-18"
+        }
+    ],
+    "meta": {
+        "total": 10,
+        "links": "",
+        "filters": []
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "No requests  yet."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/medias</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>optional</td>
+<td>Int The ID of request.</td>
+</tr>
+<tr>
+<td><code>contact_id</code></td>
+<td>optional</td>
+<td>Int The ID of contact.</td>
+</tr>
+<tr>
+<td><code>channel_id</code></td>
+<td>optional</td>
+<td>Int The ID of channel.</td>
+</tr>
+<tr>
+<td><code>responder_id</code></td>
+<td>optional</td>
+<td>Int The ID of responder.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>optional</td>
+<td>Int Status of request.</td>
+</tr>
+<tr>
+<td><code>from</code></td>
+<td>optional</td>
+<td>Date Date of request creation.</td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td>optional</td>
+<td>Date Date of request cancellation.</td>
+</tr>
+<tr>
+<td><code>orderBy</code></td>
+<td>optional</td>
+<td>String Field name.</td>
+</tr>
+<tr>
+<td><code>sortBy</code></td>
+<td>optional</td>
+<td>The supported sort directions are either ‘asc’ for ascending or ‘desc’ for descending.</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>optional</td>
+<td>Int The number of items returned in the response.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_00f5ebe26d85a2ea26759b6dea95b28f -->
+<h1>Messages management</h1>
+<p>APIs for managing Messages</p>
+<!-- START_c61e9c2b3fdeea56ee207c8db3d88546 -->
+<h2>Display a list of messages.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/messages?id=saepe&amp;request_id=praesentium&amp;from=commodi&amp;to=iste&amp;orderBy=a&amp;sortBy=porro&amp;limit=13" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/messages"
+);
+
+let params = {
+    "id": "saepe",
+    "request_id": "praesentium",
+    "from": "commodi",
+    "to": "iste",
+    "orderBy": "a",
+    "sortBy": "porro",
+    "limit": "13",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/messages',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'query' =&gt; [
+            'id'=&gt; 'saepe',
+            'request_id'=&gt; 'praesentium',
+            'from'=&gt; 'commodi',
+            'to'=&gt; 'iste',
+            'orderBy'=&gt; 'a',
+            'sortBy'=&gt; 'porro',
+            'limit'=&gt; '13',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/messages'
+params = {
+  'id': 'saepe',
+  'request_id': 'praesentium',
+  'from': 'commodi',
+  'to': 'iste',
+  'orderBy': 'a',
+  'sortBy': 'porro',
+  'limit': '13',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "No messages yet."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/messages</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>optional</td>
+<td>int The id of message</td>
+</tr>
+<tr>
+<td><code>request_id</code></td>
+<td>optional</td>
+<td>int The ID of request.</td>
+</tr>
+<tr>
+<td><code>from</code></td>
+<td>optional</td>
+<td>Date Date of message creation.</td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td>optional</td>
+<td>Date Date of message cancellation.</td>
+</tr>
+<tr>
+<td><code>orderBy</code></td>
+<td>optional</td>
+<td>String Field name.</td>
+</tr>
+<tr>
+<td><code>sortBy</code></td>
+<td>optional</td>
+<td>The supported sort directions are either ‘asc’ for ascending or ‘desc’ for descending.</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>optional</td>
+<td>Int The number of items returned in the response.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_c61e9c2b3fdeea56ee207c8db3d88546 -->
+<h1>Profiles management</h1>
+<p>APIs for managing Profiles</p>
+<!-- START_f87d568af345c2e37049ca0b695ccfc4 -->
+<h2>Display list of profiles.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/profiles" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/profiles"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/profiles',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/profiles'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Server Error"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/profiles</code></p>
+<!-- END_f87d568af345c2e37049ca0b695ccfc4 -->
+<h1>Questions management</h1>
+<p>APIs for managing Questions</p>
+<!-- START_de9212b4bd813e07f73b53cc3bd13088 -->
+<h2>Display a list of questions.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/questions?responder_id=saepe&amp;field_id=iure&amp;status=expedita&amp;order=quia&amp;from=rerum&amp;to=nostrum&amp;orderBy=quod&amp;sortBy=enim&amp;limit=19" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/questions"
+);
+
+let params = {
+    "responder_id": "saepe",
+    "field_id": "iure",
+    "status": "expedita",
+    "order": "quia",
+    "from": "rerum",
+    "to": "nostrum",
+    "orderBy": "quod",
+    "sortBy": "enim",
+    "limit": "19",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/questions',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'query' =&gt; [
+            'responder_id'=&gt; 'saepe',
+            'field_id'=&gt; 'iure',
+            'status'=&gt; 'expedita',
+            'order'=&gt; 'quia',
+            'from'=&gt; 'rerum',
+            'to'=&gt; 'nostrum',
+            'orderBy'=&gt; 'quod',
+            'sortBy'=&gt; 'enim',
+            'limit'=&gt; '19',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/questions'
+params = {
+  'responder_id': 'saepe',
+  'field_id': 'iure',
+  'status': 'expedita',
+  'order': 'quia',
+  'from': 'rerum',
+  'to': 'nostrum',
+  'orderBy': 'quod',
+  'sortBy': 'enim',
+  'limit': '19',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "No questions yet."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/questions</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>responder_id</code></td>
+<td>optional</td>
+<td>int The id of question.</td>
+</tr>
+<tr>
+<td><code>field_id</code></td>
+<td>optional</td>
+<td>int The id of field.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>optional</td>
+<td>Int Status of question.</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>optional</td>
+<td>Int order of question.</td>
+</tr>
+<tr>
+<td><code>from</code></td>
+<td>optional</td>
+<td>Date Date of question creation.</td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td>optional</td>
+<td>Date Date of question cancellation.</td>
+</tr>
+<tr>
+<td><code>orderBy</code></td>
+<td>optional</td>
+<td>String Field name.</td>
+</tr>
+<tr>
+<td><code>sortBy</code></td>
+<td>optional</td>
+<td>The supported sort directions are either ‘asc’ for ascending or ‘desc’ for descending.</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>optional</td>
+<td>Int The number of items returned in the response.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_de9212b4bd813e07f73b53cc3bd13088 -->
+<!-- START_f605dcf2ca92a58323db87f649ac1dae -->
+<h2>View Question details .</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/questions/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/questions/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/questions/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/questions/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Server Error"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/questions/{question}</code></p>
+<!-- END_f605dcf2ca92a58323db87f649ac1dae -->
+<!-- START_d38bad57161d95af1da578161ebd88e4 -->
+<h2>Add new question.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://127.0.0.1:8000/api/questions/add" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"responder_id":"dolorem","field_id":"sequi","message":"suscipit","response":"voluptatibus","order":16}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/questions/add"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "responder_id": "dolorem",
+    "field_id": "sequi",
+    "message": "suscipit",
+    "response": "voluptatibus",
+    "order": 16
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://127.0.0.1:8000/api/questions/add',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'responder_id' =&gt; 'dolorem',
+            'field_id' =&gt; 'sequi',
+            'message' =&gt; 'suscipit',
+            'response' =&gt; 'voluptatibus',
+            'order' =&gt; 16,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/questions/add'
+payload = {
+    "responder_id": "dolorem",
+    "field_id": "sequi",
+    "message": "suscipit",
+    "response": "voluptatibus",
+    "order": 16
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Required fields not filled or formats not recognized !"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/questions/add</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>responder_id</code></td>
+<td>Int</td>
+<td>required</td>
+<td>The id of responder.</td>
+</tr>
+<tr>
+<td><code>field_id</code></td>
+<td>Int</td>
+<td>required</td>
+<td>The id of field.</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>String</td>
+<td>optional</td>
+<td>The question content.</td>
+</tr>
+<tr>
+<td><code>response</code></td>
+<td>Boolean</td>
+<td>optional</td>
+<td>The question have response or not.</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>The order of the question.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_d38bad57161d95af1da578161ebd88e4 -->
+<!-- START_b77e60150e0bc71e62f3bca8143d40ed -->
+<h2>Remove question.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://127.0.0.1:8000/api/questions/ex/delete" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/questions/ex/delete"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://127.0.0.1:8000/api/questions/ex/delete',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/questions/ex/delete'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "question deleted successfully"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/questions/{question}/delete</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>question</code></td>
+<td>required</td>
+<td>Int The id of question.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_b77e60150e0bc71e62f3bca8143d40ed -->
+<!-- START_26701bc6f96ba6871d26e795e1607a5b -->
+<h2>Update Question.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://127.0.0.1:8000/api/questions/porro/update" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"responder_id":"autem","field_id":"dolorem","message":"in","response":"quibusdam","order":12}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/questions/porro/update"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "responder_id": "autem",
+    "field_id": "dolorem",
+    "message": "in",
+    "response": "quibusdam",
+    "order": 12
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://127.0.0.1:8000/api/questions/porro/update',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'responder_id' =&gt; 'autem',
+            'field_id' =&gt; 'dolorem',
+            'message' =&gt; 'in',
+            'response' =&gt; 'quibusdam',
+            'order' =&gt; 12,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/questions/porro/update'
+payload = {
+    "responder_id": "autem",
+    "field_id": "dolorem",
+    "message": "in",
+    "response": "quibusdam",
+    "order": 12
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unauthorized operation"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/questions/{question}/update</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>question</code></td>
+<td>optional</td>
+<td>Int required the question id.</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>responder_id</code></td>
+<td>Int</td>
+<td>optional</td>
+<td>The id of responder.</td>
+</tr>
+<tr>
+<td><code>field_id</code></td>
+<td>Int</td>
+<td>optional</td>
+<td>The id of field.</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>String</td>
+<td>optional</td>
+<td>The question content.</td>
+</tr>
+<tr>
+<td><code>response</code></td>
+<td>Boolean</td>
+<td>optional</td>
+<td>The question have response or not.</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>The order of the question.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_26701bc6f96ba6871d26e795e1607a5b -->
+<h1>Requests management</h1>
+<p>APIs for managing Requests</p>
+<!-- START_8f3e0849f59d202e000098a13fc95f23 -->
+<h2>Display a list of requests.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/requests?contact_id=esse&amp;channel_id=aut&amp;responder_id=facere&amp;status=ea&amp;from=eius&amp;to=ipsa&amp;orderBy=quia&amp;sortBy=et&amp;limit=15" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/requests"
+);
+
+let params = {
+    "contact_id": "esse",
+    "channel_id": "aut",
+    "responder_id": "facere",
+    "status": "ea",
+    "from": "eius",
+    "to": "ipsa",
+    "orderBy": "quia",
+    "sortBy": "et",
+    "limit": "15",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/requests',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'query' =&gt; [
+            'contact_id'=&gt; 'esse',
+            'channel_id'=&gt; 'aut',
+            'responder_id'=&gt; 'facere',
+            'status'=&gt; 'ea',
+            'from'=&gt; 'eius',
+            'to'=&gt; 'ipsa',
+            'orderBy'=&gt; 'quia',
+            'sortBy'=&gt; 'et',
+            'limit'=&gt; '15',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/requests'
+params = {
+  'contact_id': 'esse',
+  'channel_id': 'aut',
+  'responder_id': 'facere',
+  'status': 'ea',
+  'from': 'eius',
+  'to': 'ipsa',
+  'orderBy': 'quia',
+  'sortBy': 'et',
+  'limit': '15',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "data": [
+        {
+            "id": 1,
+            "contact_id": 1,
+            "channel_id": 1,
+            "responder_id": 1,
+            "type": "form",
+            "content": "",
+            "status": 1,
+            "date_send": "2021-02-10"
+        },
+        {
+            "id": 2,
+            "contact_id": 3,
+            "channel_id": 1,
+            "responder_id": 4,
+            "type": "message",
+            "content": "name",
+            "status": 1,
+            "date_send": "2020-11-18"
+        }
+    ],
+    "meta": {
+        "total": 10,
+        "links": "",
+        "filters": []
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "No requests yet."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/requests</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>contact_id</code></td>
+<td>optional</td>
+<td>int The id of contact.</td>
+</tr>
+<tr>
+<td><code>channel_id</code></td>
+<td>optional</td>
+<td>int The id of channel.</td>
+</tr>
+<tr>
+<td><code>responder_id</code></td>
+<td>optional</td>
+<td>int The id of responder</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>optional</td>
+<td>Int Status of request.</td>
+</tr>
+<tr>
+<td><code>from</code></td>
+<td>optional</td>
+<td>Date Date of request creation.</td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td>optional</td>
+<td>Date Date of request cancellation.</td>
+</tr>
+<tr>
+<td><code>orderBy</code></td>
+<td>optional</td>
+<td>String Field name.</td>
+</tr>
+<tr>
+<td><code>sortBy</code></td>
+<td>optional</td>
+<td>The supported sort directions are either ‘asc’ for ascending or ‘desc’ for descending.</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>optional</td>
+<td>Int The number of items returned in the response.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_8f3e0849f59d202e000098a13fc95f23 -->
+<h1>Responders management</h1>
+<p>APIs for managing Responders</p>
+<!-- START_8fe2b08f9e2b01a2fd204ff0cd679dc1 -->
+<h2>Display a list of responders.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/responders?status=vitae&amp;from=sunt&amp;to=voluptatum&amp;orderBy=quia&amp;sortBy=impedit&amp;limit=18" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/responders"
+);
+
+let params = {
+    "status": "vitae",
+    "from": "sunt",
+    "to": "voluptatum",
+    "orderBy": "quia",
+    "sortBy": "impedit",
+    "limit": "18",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/responders',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'query' =&gt; [
+            'status'=&gt; 'vitae',
+            'from'=&gt; 'sunt',
+            'to'=&gt; 'voluptatum',
+            'orderBy'=&gt; 'quia',
+            'sortBy'=&gt; 'impedit',
+            'limit'=&gt; '18',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/responders'
+params = {
+  'status': 'vitae',
+  'from': 'sunt',
+  'to': 'voluptatum',
+  'orderBy': 'quia',
+  'sortBy': 'impedit',
+  'limit': '18',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "data": [
+        {
+            "id": 1,
+            "account_id": 1,
+            "name": "First collection bot",
+            "content": "",
+            "status": 1,
+            "date_start": "2021-02-10",
+            "date_end": null
+        },
+        {
+            "id": 2,
+            "account_id": 1,
+            "name": "Landing page collector",
+            "content": "",
+            "status": 1,
+            "date_start": "2021-01-21",
+            "date_end": null
+        }
+    ],
+    "meta": {
+        "total": 10,
+        "links": "",
+        "filters": []
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "No responders yet."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/responders</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td>optional</td>
+<td>Int Status of request.</td>
+</tr>
+<tr>
+<td><code>from</code></td>
+<td>optional</td>
+<td>Date Date of request creation.</td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td>optional</td>
+<td>Date Date of request cancellation.</td>
+</tr>
+<tr>
+<td><code>orderBy</code></td>
+<td>optional</td>
+<td>String Field name.</td>
+</tr>
+<tr>
+<td><code>sortBy</code></td>
+<td>optional</td>
+<td>The supported sort directions are either ‘asc’ for ascending or ‘desc’ for descending.</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>optional</td>
+<td>Int The number of items returned in the response.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_8fe2b08f9e2b01a2fd204ff0cd679dc1 -->
+<!-- START_9eb3fdff0a1aa133974484faa217a069 -->
+<h2>View responder details.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/responders/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/responders/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/responders/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/responders/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "No query results for model [App\\Models\\Responders] 1"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/responders/{responder}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>responders</code></td>
+<td>required</td>
+<td>the id of responder</td>
+</tr>
+</tbody>
+</table>
+<!-- END_9eb3fdff0a1aa133974484faa217a069 -->
+<!-- START_5b8ce3c88f5163de39e38115d695a2bc -->
+<h2>Add new responder.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://127.0.0.1:8000/api/responders/add" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"name":"voluptatem","type":"doloremque"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/responders/add"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "name": "voluptatem",
+    "type": "doloremque"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://127.0.0.1:8000/api/responders/add',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'name' =&gt; 'voluptatem',
+            'type' =&gt; 'doloremque',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/responders/add'
+payload = {
+    "name": "voluptatem",
+    "type": "doloremque"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "Responder created successfully",
+    "data": {
+        "id": 1,
+        "account_id": 1,
+        "name": "First collection bot",
+        "type": "1",
+        "status": 1,
+        "date_start": "2021-02-10",
+        "date_end": null
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Required fields not filled or formats not recognized !"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/responders/add</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>String</td>
+<td>required</td>
+<td>The name of responder.</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>Int</td>
+<td>required</td>
+<td>The type of responder. Example : 1 (questions)/2 (form)</td>
+</tr>
+</tbody>
+</table>
+<!-- END_5b8ce3c88f5163de39e38115d695a2bc -->
+<!-- START_a6904635f8332baac462c3395d856818 -->
+<h2>Remove responder.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://127.0.0.1:8000/api/responders/autem/delete" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/responders/autem/delete"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://127.0.0.1:8000/api/responders/autem/delete',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/responders/autem/delete'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "responder deleted successfully"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/responders/{responder}/delete</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>responder</code></td>
+<td>required</td>
+<td>Int The id of responder.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_a6904635f8332baac462c3395d856818 -->
+<!-- START_e1a63b8aabba7629c60c1d08db864665 -->
+<h2>Update responder.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://127.0.0.1:8000/api/responders/1/update" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"name":"at","type":"reprehenderit","status":"nulla"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/responders/1/update"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "name": "at",
+    "type": "reprehenderit",
+    "status": "nulla"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://127.0.0.1:8000/api/responders/1/update',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'name' =&gt; 'at',
+            'type' =&gt; 'reprehenderit',
+            'status' =&gt; 'nulla',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/responders/1/update'
+payload = {
+    "name": "at",
+    "type": "reprehenderit",
+    "status": "nulla"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "Responder updated successfully",
+    "data": {
+        "id": 1,
+        "account_id": 1,
+        "name": "First collection bot",
+        "status": 1,
+        "date_start": "2021-02-10",
+        "date_end": null
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unauthorized operation"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/responders/{responder}/update</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>responders</code></td>
+<td>required</td>
+<td>the id of responder</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>String</td>
+<td>required</td>
+<td>The name of responder.</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>Int</td>
+<td>required</td>
+<td>The type of responder. Example : 1 (questions)/2 (form)</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Int</td>
+<td>required</td>
+<td>The status of responder. Example : 0/1</td>
+</tr>
+</tbody>
+</table>
+<!-- END_e1a63b8aabba7629c60c1d08db864665 -->
+<h1>Segments management</h1>
+<p>APIs for managing Segments</p>
+<!-- START_13a4c66fec8f4e3a84478d8c298d4e2c -->
+<h2>Display a list of segments.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://127.0.0.1:8000/api/segments?name=quia" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/segments"
+);
+
+let params = {
+    "name": "quia",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://127.0.0.1:8000/api/segments',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'query' =&gt; [
+            'name'=&gt; 'quia',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/segments'
+params = {
+  'name': 'quia',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "data": [
+        {
+            "id": 1,
+            "account_id": 1,
+            "name": "Customers"
+        },
+        {
+            "id": 1,
+            "account_id": 1,
+            "name": "Super customers"
+        }
+    ],
+    "meta": {
+        "total": 10,
+        "links": "",
+        "filters": []
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "No responders yet."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/segments</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>optional</td>
+<td>String required The name of segment.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_13a4c66fec8f4e3a84478d8c298d4e2c -->
+<!-- START_ff49c98664f2014bb9e44427db06eeb1 -->
+<h2>Add new segment.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://127.0.0.1:8000/api/segments/add" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"name":"et"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/segments/add"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "name": "et"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://127.0.0.1:8000/api/segments/add',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'name' =&gt; 'et',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/segments/add'
+payload = {
+    "name": "et"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "Segment created successfully",
+    "data": {
+        "id": 1,
+        "account_id": 1,
+        "name": "Customers"
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Required fields not filled or formats not recognized !"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/segments/add</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>String</td>
+<td>required</td>
+<td>The name of segment.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_ff49c98664f2014bb9e44427db06eeb1 -->
+<!-- START_6fa3162663dee21c717fba23273433e8 -->
+<h2>Remove segment.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://127.0.0.1:8000/api/segments/repellat/delete" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/segments/repellat/delete"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://127.0.0.1:8000/api/segments/repellat/delete',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/segments/repellat/delete'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "segment deleted successfully"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/segments/{segment}/delete</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>segment</code></td>
+<td>required</td>
+<td>Int The id of segment.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_6fa3162663dee21c717fba23273433e8 -->
+<!-- START_fc6c54349db31d52f8535370425ec475 -->
+<h2>Update segment.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://127.0.0.1:8000/api/segments/accusamus/update" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: {token}" \
+    -d '{"name":"et"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/segments/accusamus/update"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "{token}",
+};
+
+let body = {
+    "name": "et"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://127.0.0.1:8000/api/segments/accusamus/update',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; '{token}',
+        ],
+        'json' =&gt; [
+            'name' =&gt; 'et',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://127.0.0.1:8000/api/segments/accusamus/update'
+payload = {
+    "name": "et"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': '{token}'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "success",
+    "message": "Segment updated successfully",
+    "data": {
+        "id": 1,
+        "account_id": 1,
+        "name": "Customers"
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unauthorized operation"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "code": "error",
+    "message": "Unexpected error, please contact technical support."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/segments/{segment}/update</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>segment</code></td>
+<td>required</td>
+<td>the id of segment</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>String</td>
+<td>required</td>
+<td>The name of segment.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_fc6c54349db31d52f8535370425ec475 -->
+      </div>
+      <div class="dark-box">
+                        <div class="lang-selector">
+                                    <a href="#" data-language-name="bash">bash</a>
+                                    <a href="#" data-language-name="javascript">javascript</a>
+                                    <a href="#" data-language-name="php">php</a>
+                                    <a href="#" data-language-name="python">python</a>
+                              </div>
+                </div>
+    </div>
+  </body>
+</html>

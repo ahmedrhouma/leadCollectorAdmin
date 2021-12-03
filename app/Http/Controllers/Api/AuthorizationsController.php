@@ -54,7 +54,7 @@ class AuthorizationsController extends Controller
             $authorizations->take($request->limit);
             $filters['limit'] = $request->limit;
         }
-        return Helper::dataResponse($authorizations,$count,$filters);
+        return Helper::dataResponse($authorizations->toArray(),$count,$filters);
     }
 
     /**

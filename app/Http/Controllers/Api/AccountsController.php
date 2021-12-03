@@ -49,6 +49,10 @@ class AccountsController extends Controller
             $accounts->take($request->limit);
             $filters['limit'] = $request->limit;
         }
+        if ($request->has('requests') && $request->requests == true) {
+            $accounts->take($request->limit);
+            $filters['limit'] = $request->limit;
+        }
         return Helper::dataResponse($accounts->toArray(),$count,$filters);
     }
 

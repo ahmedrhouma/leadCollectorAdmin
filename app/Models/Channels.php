@@ -46,4 +46,11 @@ class Channels extends Model
     {
         return $this->hasMany(Requests::class,'channel_id');
     }
+    /**
+     * Get the account associated with the channel.
+     */
+    public function accounts()
+    {
+        return $this->belongsTo(Accounts::class,'account_id');
+    }
 }

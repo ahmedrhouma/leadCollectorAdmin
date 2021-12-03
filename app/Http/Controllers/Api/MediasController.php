@@ -8,10 +8,65 @@ use Illuminate\Support\Facades\Validator;
 use App\Helper\Helper;
 use App\Http\Controllers\Controller;
 
+/**
+ * @group  Medias management
+ *
+ * APIs for managing Medias
+ */
 class MediasController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a list of medias.
+     *
+     * @queryParam  id Int The ID of request.
+     * @queryParam  contact_id Int The ID of contact.
+     * @queryParam  channel_id Int The ID of channel.
+     * @queryParam  responder_id Int The ID of responder.
+     * @queryParam  status Int Status of request.
+     * @queryParam  from Date Date of request creation.
+     * @queryParam  to Date Date of request cancellation.
+     * @queryParam  orderBy String Field name.
+     * @queryParam  sortBy The supported sort directions are either ‘asc’ for ascending or ‘desc’ for descending.
+     * @queryParam  limit Int The number of items returned in the response.
+     *
+     * @response {
+     * "code": "success",
+     * "data": [
+     * {
+     * "id": 1,
+     * "contact_id": 1,
+     * "channel_id": 1,
+     * "responder_id": 1,
+     * "type": "form",
+     * "content": "",
+     * "status": 1,
+     * "date_send": "2021-02-10"
+     * },
+     * {
+     * "id": 2,
+     * "contact_id": 3,
+     * "channel_id": 1,
+     * "responder_id": 4,
+     * "type": "message",
+     * "content": "name",
+     * "status": 1,
+     * "date_send": "2020-11-18"
+     * }
+     * ],
+     * "meta": {
+     * "total": 10,
+     * "links": "",
+     * "filters": []
+     * }
+     * }
+     * @response 404 {
+     *  "code": "error",
+     *  "message": "No requests  yet."
+     * }
+     * @response 500 {
+     *  "code": "error",
+     *  "message": "Unexpected error, please contact technical support."
+     * }
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
@@ -21,7 +76,7 @@ class MediasController extends Controller
         $count = $medias->count();
         if (session()->has('account_id')) {
             foreach ($medias as &$media) {
-                $media['url'] = $media['tag']=="liveChat"?"Manually creation requested !":route($media['tag'] . '.oauth', ['account' => session('account_id')]);
+                $media['url'] = $media['tag'] == "liveChat" ? "Create using API only !" : route($media['tag'] . '.oauth', ['account' => session('account_id')]);
             }
         }
         $filters = [];
